@@ -6,7 +6,7 @@ from util import load_default
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QCheckBox, QTreeWidget,
-    QLabel, QMainWindow, QStatusBar, QToolBar, QInputDialog
+    QLabel, QMainWindow, QStatusBar, QToolBar, QInputDialog, QTreeWidgetItem
 )
 
 class MainWindow(QMainWindow):
@@ -24,21 +24,49 @@ class MainWindow(QMainWindow):
         table.setHorizontalHeaderLabels(["Screen", "Area Name", "Position"])
         '''
 
-        tree = QTreeWidget(self)
-        tree.setColumnCount(3)
-        tree.setHeaderLabels(["Screen", "Area Name", "Position"])
-
+        self.tree = QTreeWidget(self)
+        self.tree.setColumnCount(2)
+        self.tree.setColumnWidth(0, 350)
+        self.tree.setHeaderLabels(["Screen area", "Position"])
         treedata = load_default()
-        print(treedata)
+        self.populateTree(treedata)
+
         # The `Qt` namespace has a lot of attributes to customize
         # widgets. See: http://doc.qt.io/qt-6/qt.html
         # label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # Set the central widget of the Window. Widget will expand
         # to take up all the space in the window by default.
-        self.setCentralWidget(tree)
+        self.setCentralWidget(self.tree)
 
         self.createMenus()
+
+    def populateTree(self, data):
+        screens = []
+        for k, v in data.items():
+            screen = QTreeWidgetItem([k])
+            for area in v:
+                for areaName, coords in area.items():
+                    pos = str(coords[0]) + ", " + str(coords[1])
+                    name = QTreeWidgetItem([areaName, pos])
+                    screen.addChild(name)
+            screens.append(screen)
+
+        '''
+        items = []
+        for key, values in data.items():
+            item = QTreeWidgetItem([key])
+            for value in values:
+                print(value)
+                print(type(value))
+                ext = value.values()
+                child = QTreeWidgetItem([value, ext])
+                item.addChild(child)
+            items.append(item)
+
+        tree.insertTopLevelItems(0, items)
+        '''
+        self.tree.insertTopLevelItems(0, screens)
 
     def createMenus(self):
 
