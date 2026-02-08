@@ -2,12 +2,47 @@
 import sys
 import pyautogui as pag
 from clickThings import *
+from paths import Paths
 from util import load_default
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication, QCheckBox, QTreeWidget,
-    QLabel, QMainWindow, QStatusBar, QToolBar, QInputDialog, QTreeWidgetItem
+from PySide6.QtGui import QAction, QIcon, QKeySequence, QPixmap
+from PySide6.QtWidgets import (QApplication, QCheckBox, QTreeWidget, QDialog, QDialogButtonBox,
+    QLabel, QMainWindow, QStatusBar, QToolBar, QInputDialog, QTreeWidgetItem, QVBoxLayout
 )
+
+class AboutDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        QBtn = QDialogButtonBox.StandardButton.Ok  # No cancel
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        layout = QVBoxLayout()
+
+        title = QLabel("GUI Macro Tester")
+        font = title.font()
+        font.setPointSize(20)
+        title.setFont(font)
+
+        layout.addWidget(title)
+
+        logo = QLabel()
+        logo.setPixmap(QPixmap(Paths.icon("tw.png")))
+        layout.addWidget(logo)
+
+        layout.addWidget(QLabel("github.com/offlinesoftware"))
+        layout.addWidget(QLabel("Copyright 2026 Thomas Walker"))
+
+        for i in range(0, layout.count()):
+            layout.itemAt(i).setAlignment(
+                Qt.AlignmentFlag.AlignHCenter
+            )
+
+        layout.addWidget(self.buttonBox)
+
+        self.setLayout(layout)
 
 class MainWindow(QMainWindow):
     """GUI Macro Tester main window class"""
@@ -62,8 +97,8 @@ class MainWindow(QMainWindow):
         button_action = QAction(QIcon("bug.png"), "&New program", self)
         button_action.setStatusTip("Run current script")
         button_action.triggered.connect(self.go_button_clicked)
-        button_action.setCheckable(True)
-        button_action.setShortcut(QKeySequence("Ctrl+p"))
+        # button_action.setCheckable(True)
+        # button_action.setShortcut(QKeySequence("Ctrl+p"))
         toolbar.addAction(button_action)
 
         toolbar.addSeparator()
@@ -85,13 +120,90 @@ class MainWindow(QMainWindow):
 
         # Menu bar
         menu = self.menuBar()
-        file_menu = menu.addMenu("&File")
-        file_menu.addAction(button_action)
-        file_menu.addSeparator()
-        file_submenu = file_menu.addMenu("Submenu")
-        file_submenu.addAction(button_action2)
+        
+        # tag::menuFile[]
+        file_menu = self.menuBar().addMenu("&File")
 
+        open_file_action = QAction(
+            QIcon(Paths.icon("disk--arrow.png")),
+            "Open file...",
+            self,
+        )
+        open_file_action.setStatusTip("Open from file")
+        open_file_action.triggered.connect(self.open_file)
+        file_menu.addAction(open_file_action)
 
+        save_file_action = QAction(
+            QIcon(Paths.icon("disk--pencil.png")),
+            "Save Page As...",
+            self,
+        )
+        save_file_action.setStatusTip("Save current page to file")
+        save_file_action.triggered.connect(self.save_file)
+        file_menu.addAction(save_file_action)
+        # end::menuFile[]
+        
+        # tag::menuHelp[]
+        help_menu = self.menuBar().addMenu("&Help")
+
+        about_action = QAction(
+            QIcon(Paths.icon("question.png")),
+            "About GUI Macro Tester",
+            self,
+        )
+        about_action.setStatusTip(
+            "Find out more about GUI Macro Tester"
+        )  # Hungry!
+        about_action.triggered.connect(self.about)
+        help_menu.addAction(about_action)
+
+        # end::menuHelp[]
+
+    def about(self):
+        dlg = AboutDialog()
+        dlg.exec()
+
+    # end::menuHelpfn[]
+
+    # tag::menuFilefnOpen[]
+    def open_file(self):
+        filename, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open file",
+            "",
+            "Hypertext Markup Language (*.htm *.html);;"
+            "All files (*.*)",
+        )
+
+        if filename:
+            with open(filename, "r") as f:
+                html = f.read()
+
+            self.browser.setHtml(html)
+            self.urlbar.setText(filename)
+
+    # end::menuFilefnOpen[]
+
+    # tag::menuFilefnSave[]
+    def save_file(self):
+        filename, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Page As",
+            "",
+            "Hypertext Markup Language (*.htm *.html);;"
+            "All files (*.*)",
+        )
+
+        if filename:
+            # Define callback method to handle the write.
+            def writer(html):
+                with open(filename, "w") as f:
+                    f.write(html)
+
+            self.browser.page().toHtml(writer)
+
+    # end::menuFilefnSave[]   
+    
     def toolbar_button_clicked(self, s):
         """Debug function for button click"""
 
