@@ -18,6 +18,8 @@ class AboutDialog(QDialog):
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
+        self.setWindowTitle("About GUI Macro Tester")
+        self.setFixedWidth(300)
 
         layout = QVBoxLayout()
 
@@ -52,7 +54,7 @@ class MainWindow(QMainWindow):
 
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
-        self.setFixedSize(500, 800)
+        self.setFixedSize(500, 750)
 
         # Screen co-ordinates tree
         self.tree = QTreeWidget(self)
@@ -135,10 +137,10 @@ class MainWindow(QMainWindow):
 
         save_file_action = QAction(
             QIcon(Paths.icon("disk--pencil.png")),
-            "Save Page As...",
+            "Save sequence as...",
             self,
         )
-        save_file_action.setStatusTip("Save current page to file")
+        save_file_action.setStatusTip("Save current sequence to file")
         save_file_action.triggered.connect(self.save_file)
         file_menu.addAction(save_file_action)
         # end::menuFile[]
@@ -221,16 +223,15 @@ class MainWindow(QMainWindow):
 
     
     def detect_position(self):
-        """Debug function to show main window co-ordinates"""
-
-        print(getattr(self, "pos")())
+        self.hide()
+        sleep(2)
+        self.show()
 
 
 # Run the application
 if __name__ == "__main__":
     app = QApplication([])
     window = MainWindow()
-
     app.setStyleSheet("""
         QWidget {
             font-size: 16px;
