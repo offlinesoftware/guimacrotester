@@ -1,90 +1,43 @@
 # This Python file uses the following encoding: utf-8
 import sys
-import pyautogui as pag
+from about_dialog import AboutDialog
+from screen_tree import ScreenTree
 from clickThings import *
 from paths import Paths
-from util import load_default
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QAction, QIcon, QKeySequence, QPixmap
-from PySide6.QtWidgets import (QApplication, QCheckBox, QTreeWidget, QDialog, QDialogButtonBox,
-    QLabel, QMainWindow, QStatusBar, QToolBar, QInputDialog, QTreeWidgetItem, QVBoxLayout
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QAction, QIcon, QKeySequence
+from PySide6.QtWidgets import (QApplication, QCheckBox, 
+    QMainWindow, QStatusBar, QToolBar, QInputDialog
 )
 
-class AboutDialog(QDialog):
-    def __init__(self):
-        super().__init__()
-
-        QBtn = QDialogButtonBox.StandardButton.Ok  # No cancel
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
-        self.setWindowTitle("About GUI Macro Tester")
-        self.setFixedWidth(300)
-
-        layout = QVBoxLayout()
-
-        title = QLabel("GUI Macro Tester")
-        font = title.font()
-        font.setPointSize(20)
-        title.setFont(font)
-
-        layout.addWidget(title)
-
-        logo = QLabel()
-        logo.setPixmap(QPixmap(Paths.icon("tw.png")))
-        layout.addWidget(logo)
-
-        layout.addWidget(QLabel("github.com/offlinesoftware"))
-        layout.addWidget(QLabel("Copyright 2026 Thomas Walker"))
-
-        for i in range(0, layout.count()):
-            layout.itemAt(i).setAlignment(
-                Qt.AlignmentFlag.AlignHCenter
-            )
-
-        layout.addWidget(self.buttonBox)
-
-        self.setLayout(layout)
-
-class ScreenTree(QTreeWidget):
-    def __init__(self):
-        super().__init__()
-        self.setColumnCount(2)
-        self.setColumnWidth(0, 350)
-        self.setHeaderLabels(["Screen area", "Position"])
-        self.data = load_default()
-        self.populate()
-
-    def populate(self):
-        """
-        Populate tree view from JSON data
-        
-        :param data: Dict generated from JSON file
-        """
-        screens = []
-        for k, v in self.data.items():
-            screen = QTreeWidgetItem([k])
-            for area in v:
-                for areaName, coords in area.items():
-                    pos = str(coords[0]) + ", " + str(coords[1])
-                    name = QTreeWidgetItem([areaName, pos])
-                    screen.addChild(name)
-            screens.append(screen)
-        self.insertTopLevelItems(0, screens)
-
-    def new_screen(self, name):
-        self.data[name] = []
-        self.clear()
-        self.populate()
-
 class Toolbar(QToolBar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent, tb_num):
+        super(Toolbar, self).__init__(parent)
         self.setIconSize(QSize(16, 16))
+        match tb_num:
+            case 1:
+                add_screen_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Add new screen",
+                    self
+                )
+                add_screen_action.setStatusTip("Add a new grouping of screen co-ordinates")
+                add_screen_action.triggered.connect(self.parent().add_screen)
+                self.addAction(add_screen_action)
+            
+            case _:
+                print("Attempt to construct undefined toolbar:", tb_num)
 
 
 class MainWindow(QMainWindow):
-    """GUI Macro Tester main window class"""
+    """GUI Macro Tester main window class
+
+    Attributes:
+        tree (ScreenTree): QTreeWidget to show the loaded screen co-ordinate data.
+        tb1 (Toolbar): QToolbar to add and remove screen co-ordinate data.
+        tb2 (Toolbar): Not yet implemented
+    """
+
 
     def __init__(self, parent=None):
         """Constructor"""
@@ -97,17 +50,16 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.tree)
 
+        # Toolbars
+        tb1 = Toolbar(self, 1)
+        self.addToolBar(tb1)
+        tb2 = Toolbar(self, 2)
+
         self.createMenus()
 
 
     def createMenus(self):
-        """Create menus and toolbars"""
-
-        # Toolbar
-        toolbar = QToolBar("My main toolbar")
-        toolbar.setIconSize(QSize(16, 16))
-        self.addToolBar(toolbar)
-
+        '''
         # Go button
         button_action = QAction(QIcon("bug.png"), "&New program", self)
         button_action.setStatusTip("Run current script")
@@ -129,12 +81,8 @@ class MainWindow(QMainWindow):
         resolution = str(screenWidth) + " x " + str(screenHeight)
         toolbar.addWidget(QLabel(resolution))
         # toolbar.addWidget(QCheckBox())
-
-        # Add screen button
-        add_screen_action = QAction(QIcon("ui-tab--plus.png"), "Add new screen", self)
-        add_screen_action.setStatusTip("Add a new grouping of screen co-ordinates")
-        add_screen_action.triggered.connect(self.add_screen)
-        toolbar.addAction(add_screen_action)
+        '''
+        
 
         # Bit at the bottom for tooltips
         self.setStatusBar(QStatusBar(self))
@@ -228,6 +176,7 @@ class MainWindow(QMainWindow):
     #
     # Member functions
     #
+    
 
     def add_screen(self):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
