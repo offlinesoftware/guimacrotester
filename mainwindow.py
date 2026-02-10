@@ -46,6 +46,43 @@ class AboutDialog(QDialog):
 
         self.setLayout(layout)
 
+class ScreenTree(QTreeWidget):
+    def __init__(self):
+        super().__init__()
+        self.setColumnCount(2)
+        self.setColumnWidth(0, 350)
+        self.setHeaderLabels(["Screen area", "Position"])
+        self.data = load_default()
+        self.populate()
+
+    def populate(self):
+        """
+        Populate tree view from JSON data
+        
+        :param data: Dict generated from JSON file
+        """
+        screens = []
+        for k, v in self.data.items():
+            screen = QTreeWidgetItem([k])
+            for area in v:
+                for areaName, coords in area.items():
+                    pos = str(coords[0]) + ", " + str(coords[1])
+                    name = QTreeWidgetItem([areaName, pos])
+                    screen.addChild(name)
+            screens.append(screen)
+        self.insertTopLevelItems(0, screens)
+
+    def new_screen(self, name):
+        self.data[name] = []
+        self.clear()
+        self.populate()
+
+class Toolbar(QToolBar):
+    def __init__(self):
+        super().__init__()
+        self.setIconSize(QSize(16, 16))
+
+
 class MainWindow(QMainWindow):
     """GUI Macro Tester main window class"""
 
@@ -56,35 +93,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("GUI Macro Tester")
         self.setFixedSize(500, 750)
 
-        # Screen co-ordinates tree
-        self.tree = QTreeWidget(self)
-        self.tree.setColumnCount(2)
-        self.tree.setColumnWidth(0, 350)
-        self.tree.setHeaderLabels(["Screen area", "Position"])
-        treedata = load_default()
-        self.populateTree(treedata)
+        self.tree = ScreenTree()
 
         self.setCentralWidget(self.tree)
 
         self.createMenus()
-
-
-    def populateTree(self, data):
-        """
-        Populate tree view from JSON data
-        
-        :param data: Dict generated from JSON file
-        """
-        screens = []
-        for k, v in data.items():
-            screen = QTreeWidgetItem([k])
-            for area in v:
-                for areaName, coords in area.items():
-                    pos = str(coords[0]) + ", " + str(coords[1])
-                    name = QTreeWidgetItem([areaName, pos])
-                    screen.addChild(name)
-            screens.append(screen)
-        self.tree.insertTopLevelItems(0, screens)
 
 
     def createMenus(self):
@@ -217,7 +230,9 @@ class MainWindow(QMainWindow):
     #
 
     def add_screen(self):
-        pass
+        screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
+        if ok and screen_name:
+            self.tree.new_screen(screen_name)
     
     def toolbar_button_clicked(self, s):
         """Debug function for button click"""
