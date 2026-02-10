@@ -106,16 +106,22 @@ class MainWindow(QMainWindow):
         toolbar.addSeparator()
 
         # Debug button
-        button_action2 = QAction(QIcon("bug.png"), "Your &button2", self)
-        button_action2.setStatusTip("This is your button2")
+        button_action2 = QAction(QIcon("bug.png"), "Hide for 2 s", self)
+        button_action2.setStatusTip("Click to hide main window")
         button_action2.triggered.connect(self.detect_position)
-        button_action2.setCheckable(True)
+        # button_action2.setCheckable(True)
         toolbar.addAction(button_action2)
 
         # Resolution label
         resolution = str(screenWidth) + " x " + str(screenHeight)
         toolbar.addWidget(QLabel(resolution))
-        toolbar.addWidget(QCheckBox())
+        # toolbar.addWidget(QCheckBox())
+
+        # Add screen button
+        add_screen_action = QAction(QIcon("ui-tab--plus.png"), "Add new screen", self)
+        add_screen_action.setStatusTip("Add a new grouping of screen co-ordinates")
+        add_screen_action.triggered.connect(self.add_screen)
+        toolbar.addAction(add_screen_action)
 
         # Bit at the bottom for tooltips
         self.setStatusBar(QStatusBar(self))
@@ -205,6 +211,13 @@ class MainWindow(QMainWindow):
             self.browser.page().toHtml(writer)
 
     # end::menuFilefnSave[]   
+    
+    #
+    # Member functions
+    #
+
+    def add_screen(self):
+        pass
     
     def toolbar_button_clicked(self, s):
         """Debug function for button click"""
