@@ -2,42 +2,32 @@
 import sys
 from about_dialog import AboutDialog
 from screen_tree import ScreenTree
-from clickThings import *
+from toolbar import Toolbar
+# from clickThings import *
+from pynput import keyboard
 from paths import Paths
-from PySide6.QtCore import QSize
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QCheckBox,
-    QMainWindow, QStatusBar, QToolBar, QInputDialog
+    QMainWindow, QStatusBar, QInputDialog
 )
 
-class Toolbar(QToolBar):
-    def __init__(self, parent, tb_num):
-        super(Toolbar, self).__init__(parent)
-        self.setIconSize(QSize(16, 16))
-        match tb_num:
-            case 1:
-                # 'Add new screen' button
-                add_screen_action = QAction(
-                    # QIcon(Paths.icon("ui-tab--plus.png")), 
-                    "Add new screen",
-                    self
-                )
-                add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
-                add_screen_action.triggered.connect(self.parent().add_screen)
-                self.addAction(add_screen_action)
+class InputController():
 
-                # 'Add new position' button
-                add_position_action = QAction(
-                    # QIcon(Paths.icon("plus.png")), 
-                    "Add new position",
-                    self
-                )
-                add_position_action.setStatusTip("Add the co-ordinates of a position to the selected screen group")
-                add_position_action.triggered.connect(self.parent().add_position)
-                self.addAction(add_position_action)
+    def on_press(self, key):
+        try:
+            print('alphanumeric key {0} pressed'.format(key.char))
+        except AttributeError:
+            print('special key {0} pressed'.format(key))
 
-            case _:
-                print("Attempt to construct undefined toolbar:", tb_num)
+    def on_release(self, key):
+        print('{0} released'.format(key))
+
+    def __init__(self):
+        super().__init__()
+        listener = keyboard.Listener(
+            on_press = self.on_press,
+            on_release = self.on_release)
+        listener.start()
 
 
 class MainWindow(QMainWindow):
@@ -68,6 +58,8 @@ class MainWindow(QMainWindow):
 
         self.createMenus()
 
+        ic = InputController()
+
     def createMenus(self):
         '''
         # Go button
@@ -92,7 +84,6 @@ class MainWindow(QMainWindow):
         toolbar.addWidget(QLabel(resolution))
         # toolbar.addWidget(QCheckBox())
         '''
-        
 
         # Bit at the bottom for tooltips
         self.setStatusBar(QStatusBar(self))
