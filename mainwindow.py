@@ -3,32 +3,13 @@ import sys
 from about_dialog import AboutDialog
 from screen_tree import ScreenTree
 from toolbar import Toolbar
+from input_controller import InputController
 # from clickThings import *
-from pynput import keyboard
 from paths import Paths
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QCheckBox,
-    QMainWindow, QStatusBar, QInputDialog
+    QMainWindow, QStatusBar, QInputDialog, QFileDialog
 )
-
-class InputController():
-
-    def on_press(self, key):
-        try:
-            print('alphanumeric key {0} pressed'.format(key.char))
-        except AttributeError:
-            print('special key {0} pressed'.format(key))
-
-    def on_release(self, key):
-        print('{0} released'.format(key))
-
-    def __init__(self):
-        super().__init__()
-        listener = keyboard.Listener(
-            on_press = self.on_press,
-            on_release = self.on_release)
-        listener.start()
-
 
 class MainWindow(QMainWindow):
     """GUI Macro Tester main window class
@@ -54,11 +35,10 @@ class MainWindow(QMainWindow):
         # Toolbars
         tb1 = Toolbar(self, 1)
         self.addToolBar(tb1)
-        tb2 = Toolbar(self, 2)
 
         self.createMenus()
 
-        ic = InputController()
+        self.input_controller = InputController()
 
     def createMenus(self):
         '''
@@ -184,8 +164,12 @@ class MainWindow(QMainWindow):
         if ok and screen_name:
             self.tree.new_screen(screen_name)
 
-    def add_position(self):
-        pass
+    def record_macro(self):
+        new_seq = []
+        if self.input_controller.kb_listener.running:
+            self.input_controller.stop()
+        else:
+            self.input_controller.start()
     
     def toolbar_button_clicked(self, s):
         """Debug function for button click"""

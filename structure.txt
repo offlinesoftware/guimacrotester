@@ -1,0 +1,89 @@
+Here’s a clean, practical overview of a **standard Python project structure**. There’s no single “official” layout, but this one is widely used, easy to scale, and works well for most applications.
+
+---
+
+# 📁 Standard Python Project Structure
+
+```
+project_name/
+│
+├── pyproject.toml        # Modern build config (preferred over setup.py)
+├── requirements.txt       # Dependencies (optional if using pyproject.toml)
+├── README.md              # Project overview and instructions
+├── LICENSE                # License file
+├── .gitignore             # Git ignore rules
+│
+├── src/                   # All source code lives here
+│   └── project_name/
+│       ├── __init__.py
+│       ├── main.py        # Entry point (if needed)
+│       ├── module1.py
+│       ├── module2.py
+│       └── utils/
+│           └── helpers.py
+│
+├── tests/                 # Unit tests
+│   ├── __init__.py
+│   ├── test_module1.py
+│   └── test_module2.py
+│
+├── docs/                  # Documentation (optional)
+│   └── index.md
+│
+└── scripts/               # Utility scripts (optional)
+    └── data_setup.py
+```
+
+---
+
+# 🧩 What Each Part Is For
+
+## **Top-level files**
+- **pyproject.toml** – Defines dependencies, build system, and metadata. Modern standard.
+- **requirements.txt** – Simple dependency list (useful for virtual environments).
+- **README.md** – Explains what the project does and how to use it.
+- **LICENSE** – Makes your project legally usable by others.
+- **.gitignore** – Keeps unnecessary files out of version control.
+
+---
+
+## **src/** – Your actual Python package
+This structure avoids import confusion and is recommended for clean packaging.
+
+Inside:
+
+- `__init__.py` makes it a package.
+- `main.py` can be your CLI or app entry point.
+- Additional modules and subpackages go here.
+
+---
+
+## **tests/** – Your test suite
+Mirrors the structure of `src/` so each module has a corresponding test file.
+
+---
+
+## **docs/** – Optional documentation
+Useful for larger projects or when generating docs with Sphinx or MkDocs.
+
+---
+
+## **scripts/** – Optional helper scripts
+Great for data prep, automation, or one-off utilities.
+
+---
+
+# ⭐ A Minimal Version (for small projects)
+
+```
+project_name/
+├── project_name/
+│   ├── __init__.py
+│   └── main.py
+├── tests/
+│   └── test_main.py
+├── requirements.txt
+└── README.md
+```
+
+---

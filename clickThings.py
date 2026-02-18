@@ -8,6 +8,7 @@ from time import sleep
 delay = 0.2
 screenWidth, screenHeight = pag.size()
 
+
 # Status bar
 s_bar = {
     "home": [950, 100]

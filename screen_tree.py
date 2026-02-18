@@ -1,4 +1,5 @@
 import json
+from paths import Paths
 from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QMenu
 from PySide6.QtGui import QAction
 
@@ -51,4 +52,5 @@ class ScreenTree(QTreeWidget):
         context_menu.exec(event.globalPos())
 
     def onItemClicked(self, it, col):
-        print(it, col, it.text(col))
+        if Paths.debug:
+            print(it, col, it.text(col))
