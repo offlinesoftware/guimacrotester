@@ -33,8 +33,8 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.tree)
 
         # Toolbars
-        tb1 = Toolbar(self, 1)
-        self.addToolBar(tb1)
+        self.tb1 = Toolbar(self, 1)
+        self.addToolBar(self.tb1)
 
         self.createMenus()
 
@@ -121,7 +121,7 @@ class MainWindow(QMainWindow):
             self,
             "Open file",
             "",
-            "Hypertext Markup Language (*.htm *.html);;"
+            "Hypertext Markup Language (*.json);;"
             "All files (*.*)",
         )
 
@@ -167,33 +167,15 @@ class MainWindow(QMainWindow):
     def record_macro(self):
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
+            self.tb1.play_macro_action.setEnabled(True)
         else:
             self.input_controller.start()
     
     def play_macro(self):
+        self.tb1.record_macro_action.setEnabled(False)
         self.input_controller.play()
+        self.tb1.record_macro_action.setEnabled(True)
     
-    def toolbar_button_clicked(self, s):
-        """Debug function for button click"""
-
-        print("click", s)
-
-
-    def go_button_clicked(self):
-        """
-        Execute current macro sequence
-        """
-        
-        program_name, ok = QInputDialog.getText(self, 'Enter progam name', 'Name of new program:')
-        if ok and program_name:
-            new_program(program_name)
-
-    
-    def detect_position(self):
-        self.hide()
-        sleep(2)
-        self.show()
-
 
 # Run the application
 if __name__ == "__main__":

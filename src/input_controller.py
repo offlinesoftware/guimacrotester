@@ -1,3 +1,4 @@
+from time import sleep
 from paths import Paths
 from pynput import keyboard, mouse
 
@@ -60,16 +61,34 @@ class InputController():
             print(self.macro)
 
     def play(self):
-        pass
+        for inpt in self.macro:
+            print(inpt)
+
+            match inpt["type"]:
+                case "keypress":
+                    self.kb_controller.press(inpt["key"])
+
+                case "release":
+                    self.kb_controller.release(inpt["key"])
+        
+                case "click":
+                    self.mouse_controller.position = (inpt["x"], inpt["y"])
+                    if inpt["pressed"]:
+                        self.mouse_controller.press(inpt["button"])
+                    else:
+                        self.mouse_controller.release(inpt["button"])
+
 
     def __init__(self):
         super().__init__()
 
         self.kb_listener = keyboard.Listener(
-        on_press = self.on_press,
-        on_release = self.on_release)
+            on_press = self.on_press,
+            on_release = self.on_release)
+        self.kb_controller = keyboard.Controller()
 
         self.mouse_listener = mouse.Listener(
-        on_move=self.on_move,
-        on_click=self.on_click,
-        on_scroll=self.on_scroll)
+            on_move=self.on_move,
+            on_click=self.on_click,
+            on_scroll=self.on_scroll)
+        self.mouse_controller = mouse.Controller()

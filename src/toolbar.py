@@ -10,34 +10,36 @@ class Toolbar(QToolBar):
         match tb_num:
             case 1:
                 # 'Add new screen' button
-                add_screen_action = QAction(
+                self.add_screen_action = QAction(
                     # QIcon(Paths.icon("ui-tab--plus.png")), 
                     "Add new screen",
                     self
                 )
-                add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
-                add_screen_action.triggered.connect(self.parent().add_screen)
-                self.addAction(add_screen_action)
+                self.add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
+                self.add_screen_action.triggered.connect(self.parent().add_screen)
+                self.addAction(self.add_screen_action)
 
                 # 'Record macro' button
-                record_macro_action = QAction(
+                self.record_macro_action = QAction(
                     # QIcon(Paths.icon("plus.png")), 
                     "Record macro",
                     self
                 )
-                record_macro_action.setStatusTip("Record a sequence of inputs")
-                record_macro_action.triggered.connect(self.parent().record_macro)
-                self.addAction(record_macro_action)
+                self.record_macro_action.setStatusTip("Record a sequence of inputs")
+                self.record_macro_action.triggered.connect(self.parent().record_macro)
+                self.addAction(self.record_macro_action)
 
                 # 'Play macro' button
-                play_macro_action = QAction(
+                self.play_macro_action = QAction(
                     # QIcon(Paths.icon("plus.png")), 
                     "Play macro",
                     self
                 )
-                play_macro_action.setStatusTip("Play back the recorded sequence of inputs")
-                play_macro_action.triggered.connect(self.parent().play_macro)
-                self.addAction(play_macro_action)
+                self.play_macro_action.setStatusTip("Play back the recorded sequence of inputs")
+                self.play_macro_action.triggered.connect(self.parent().play_macro)
+                self.play_macro_action.setEnabled(False)
+                self.addAction(self.play_macro_action)
+
 
             case _:
                 if Paths.debug:
