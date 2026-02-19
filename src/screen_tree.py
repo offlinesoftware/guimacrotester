@@ -12,7 +12,7 @@ class ScreenTree(QTreeWidget):
         self.load_data()
         self.populate()
     
-    def load_data(self, file='default.json'):
+    def load_data(self, file='data/default.json'):
         with open(file) as json_file:
             self.data = json.load(json_file)
 

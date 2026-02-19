@@ -25,9 +25,19 @@ class Toolbar(QToolBar):
                     "Record macro",
                     self
                 )
-                record_macro_action.setStatusTip("Add the co-ordinates of a position to the selected screen group")
+                record_macro_action.setStatusTip("Record a sequence of inputs")
                 record_macro_action.triggered.connect(self.parent().record_macro)
                 self.addAction(record_macro_action)
+
+                # 'Play macro' button
+                play_macro_action = QAction(
+                    # QIcon(Paths.icon("plus.png")), 
+                    "Play macro",
+                    self
+                )
+                play_macro_action.setStatusTip("Play back the recorded sequence of inputs")
+                play_macro_action.triggered.connect(self.parent().play_macro)
+                self.addAction(play_macro_action)
 
             case _:
                 if Paths.debug:

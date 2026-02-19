@@ -1,0 +1,15 @@
+[project]
+name = "GUI Macro Tester"
+dependencies = [
+    "PySide6",
+    "pynput"
+]
+description = "GUI macro tester"
+readme = "README.md"
+license = { text = "Apache 2.0" }
+authors = [
+    { name = "Thomas Walker" email = ""}
+]
+
+[tool.pyside6-project]
+files = ["mainwindow.py", "clickThings.py"]

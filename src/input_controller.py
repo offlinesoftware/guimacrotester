@@ -59,6 +59,9 @@ class InputController():
             print("\nMacro of length:", len(self.macro))
             print(self.macro)
 
+    def play(self):
+        pass
+
     def __init__(self):
         super().__init__()
 
