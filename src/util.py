@@ -12,6 +12,11 @@ def load_default():
         return json.load(json_file)
 
 def open_file():
+    """
+    This function does something.
+
+    :param param1: An integer parameter.
+    """
     pass
     
 def show_license():
