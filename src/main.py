@@ -7,7 +7,7 @@ from input_controller import InputController
 # from clickThings import *
 from paths import Paths
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication, QCheckBox,
+from PySide6.QtWidgets import (QApplication,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog
 )
 
@@ -121,7 +121,7 @@ class MainWindow(QMainWindow):
             self,
             "Open file",
             "",
-            "Hypertext Markup Language (*.json);;"
+            "JavaSript Object Notation (*.json);;"
             "All files (*.*)",
         )
 
@@ -185,6 +185,13 @@ if __name__ == "__main__":
         QWidget {
             font-size: 16px;
 
+        }
+        QCheckBox {
+            padding-left: 5px;
+            padding-right: 2px;
+        }
+        QDoubleSpinBox {
+        
         }
 
     """)

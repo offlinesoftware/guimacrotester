@@ -1,7 +1,7 @@
 from paths import Paths
 from PySide6.QtGui import QAction
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QToolBar
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtWidgets import QToolBar, QCheckBox, QDoubleSpinBox
 
 class Toolbar(QToolBar):
     def __init__(self, parent, tb_num):
@@ -40,7 +40,26 @@ class Toolbar(QToolBar):
                 self.play_macro_action.setEnabled(False)
                 self.addAction(self.play_macro_action)
 
+                self.delay_checkbox = QCheckBox("Delay:")
+                
+                self.delay_checkbox.stateChanged.connect(self.on_state_changed)
+                self.addWidget(self.delay_checkbox)
+                
+                self.delay_spin = QDoubleSpinBox()
+                self.delay_spin.setRange(0, 10.0)
+                self.delay_spin.setDecimals(1)
+                self.delay_spin.setSingleStep(0.1)
+                self.delay_spin.setFixedWidth(70)
+                self.delay_spin.setEnabled(False)
+                self.addWidget(self.delay_spin)
+                
 
             case _:
                 if Paths.debug:
                     print("Attempt to construct undefined toolbar:", tb_num)
+
+    def on_state_changed(self, state):
+        if state == Qt.CheckState.Checked.value:
+            self.delay_spin.setEnabled(True)
+        else:
+            self.delay_spin.setEnabled(False)
