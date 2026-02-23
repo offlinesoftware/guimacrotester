@@ -7,7 +7,7 @@ class ScreenTree(QTreeWidget):
     def __init__(self):
         super().__init__()
         self.setColumnCount(2)
-        self.setColumnWidth(0, 350)
+        self.setColumnWidth(0, 250)
         self.setHeaderLabels(["Screen area", "Position"])
         self.load_data()
         self.populate()

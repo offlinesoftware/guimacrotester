@@ -6,6 +6,7 @@ from toolbar import Toolbar
 from input_controller import InputController
 # from clickThings import *
 from paths import Paths
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog
@@ -35,6 +36,8 @@ class MainWindow(QMainWindow):
         # Toolbars
         self.tb1 = Toolbar(self, 1)
         self.addToolBar(self.tb1)
+        self.tb2 = Toolbar(self, 2)
+        self.addToolBar(Qt.LeftToolBarArea, self.tb2)
 
         self.createMenus()
 
@@ -168,6 +171,7 @@ class MainWindow(QMainWindow):
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
             self.tb1.play_macro_action.setEnabled(True)
+            self.tb1.delay_checkbox.setEnabled(True)
         else:
             self.input_controller.start()
     

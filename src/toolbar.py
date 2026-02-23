@@ -1,5 +1,5 @@
 from paths import Paths
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import QToolBar, QCheckBox, QDoubleSpinBox
 
@@ -9,16 +9,6 @@ class Toolbar(QToolBar):
         self.setIconSize(QSize(16, 16))
         match tb_num:
             case 1:
-                # 'Add new screen' button
-                self.add_screen_action = QAction(
-                    # QIcon(Paths.icon("ui-tab--plus.png")), 
-                    "Add new screen",
-                    self
-                )
-                self.add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
-                self.add_screen_action.triggered.connect(self.parent().add_screen)
-                self.addAction(self.add_screen_action)
-
                 # 'Record macro' button
                 self.record_macro_action = QAction(
                     # QIcon(Paths.icon("plus.png")), 
@@ -43,6 +33,7 @@ class Toolbar(QToolBar):
                 self.delay_checkbox = QCheckBox("Delay:")
                 
                 self.delay_checkbox.stateChanged.connect(self.on_state_changed)
+                self.delay_checkbox.setEnabled(False)
                 self.addWidget(self.delay_checkbox)
                 
                 self.delay_spin = QDoubleSpinBox()
@@ -53,6 +44,16 @@ class Toolbar(QToolBar):
                 self.delay_spin.setEnabled(False)
                 self.addWidget(self.delay_spin)
                 
+            case 2:
+                # 'Add new screen' button
+                self.add_screen_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Add new screen",
+                    self
+                )
+                self.add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
+                self.add_screen_action.triggered.connect(self.parent().add_screen)
+                self.addAction(self.add_screen_action)
 
             case _:
                 if Paths.debug:

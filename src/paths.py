@@ -2,7 +2,7 @@ from pathlib import Path
 
 class Paths:
     base = Path(__file__).parent
-    icons = base / "icons"
+    icons = base / "../icons"
     debug = True
 
     # File loaders.
