@@ -12,15 +12,16 @@ from PySide6.QtWidgets import (QApplication,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog
 )
 
+#:
+#  name: MainWindow
+#  description: Instance of QMainWindow
+#  attributes:
+#    tb1: top toolbar
+#    tb2: left side toolbar
+#  constructor:
+#    params: implicit only
+
 class MainWindow(QMainWindow):
-    """GUI Macro Tester main window class
-
-    Attributes:
-        tree (ScreenTree): QTreeWidget to show the loaded screen co-ordinate data.
-        tb1 (Toolbar): QToolbar to add and remove screen co-ordinate data.
-        tb2 (Toolbar): Not yet implemented
-    """
-
 
     def __init__(self, parent=None):
         """Constructor"""
@@ -84,15 +85,11 @@ class MainWindow(QMainWindow):
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
 
-        # end::menuHelp[]
 
     def about(self):
         dlg = AboutDialog()
         dlg.exec()
 
-    # end::menuHelpfn[]
-
-    # tag::menuFilefnOpen[]
     def open_file(self):
         filename, _ = QFileDialog.getOpenFileName(
             self,
@@ -109,9 +106,7 @@ class MainWindow(QMainWindow):
             self.browser.setHtml(html)
             self.urlbar.setText(filename)
 
-    # end::menuFilefnOpen[]
 
-    # tag::menuFilefnSave[]
     def save_file(self):
         filename, _ = QFileDialog.getSaveFileName(
             self,
@@ -129,13 +124,11 @@ class MainWindow(QMainWindow):
 
             self.browser.page().toHtml(writer)
 
-    # end::menuFilefnSave[]   
     
     #
     # Member functions
     #
     
-
     def add_screen(self):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
         if ok and screen_name:
@@ -150,6 +143,13 @@ class MainWindow(QMainWindow):
         else:
             self.input_controller.start()
     
+    #:
+    #  name: play_macro
+    #  description: This is an example zensical comment
+    #  params:
+    #    self: the MainWindow object
+    #  returns: nothing (needn't always bother stating this)
+
     def play_macro(self):
         self.tb1.record_macro_action.setEnabled(False)
         self.input_controller.play()
