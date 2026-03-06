@@ -91,16 +91,17 @@ class MainWindow(QMainWindow):
             self,
             "Open file",
             "",
-            "JavaSript Object Notation (*.json);;"
+            "TW Sequence (*.tws);;"
             "All files (*.*)",
         )
 
         if filename:
-            with open(filename, "r") as f:
-                html = f.read()
+            mac = []
+            f = open(filename, "r")
+            # display content of the file
+            for x in f.readlines():
+                print(x, end='')
 
-            self.browser.setHtml(html)
-            self.urlbar.setText(filename)
 
     # Store currently loaded macro as JSON file
     def save_file(self):
@@ -121,7 +122,6 @@ class MainWindow(QMainWindow):
                 with open(filename, "w") as f:
                     for inpt in mac:
                         f.write('%s\n' %inpt)
-
 
     def add_screen(self):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')

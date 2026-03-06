@@ -1,6 +1,8 @@
-{'type': 'keypress', 'key': 'f', 'char': 'f'}
-{'type': 'release', 'key': 'f', 'char': 'f'}
-{'type': 'keypress', 'key': 'v', 'char': 'v'}
-{'type': 'keypress', 'key': 'f', 'char': 'f'}
-{'type': 'release', 'key': 'v', 'char': 'v'}
-{'type': 'release', 'key': 'f', 'char': 'f'}
+{'type': 'keypress', 'key': 'x', 'char': 'x'}
+{'type': 'keypress', 'key': 's', 'char': 's'}
+{'type': 'release', 'key': 'x', 'char': 'x'}
+{'type': 'release', 'key': 's', 'char': 's'}
+{'type': 'keypress', 'key': 'x', 'char': 'x'}
+{'type': 'keypress', 'key': 's', 'char': 's'}
+{'type': 'release', 'key': 'x', 'char': 'x'}
+{'type': 'release', 'key': 's', 'char': 's'}
