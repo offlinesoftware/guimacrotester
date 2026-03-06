@@ -41,6 +41,7 @@ class Toolbar(QToolBar):
                 self.delay_spin.setDecimals(1)
                 self.delay_spin.setSingleStep(0.1)
                 self.delay_spin.setFixedWidth(70)
+                self.delay_spin.setValue(0.2)
                 self.delay_spin.setEnabled(False)
                 self.addWidget(self.delay_spin)
                 

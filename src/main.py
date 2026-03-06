@@ -41,32 +41,9 @@ class MainWindow(QMainWindow):
 
         self.createMenus()
 
-        self.input_controller = InputController()
+        self.input_controller = InputController(parent=self)
 
     def createMenus(self):
-        '''
-        # Go button
-        button_action = QAction(QIcon("bug.png"), "&New program", self)
-        button_action.setStatusTip("Run current script")
-        button_action.triggered.connect(self.go_button_clicked)
-        # button_action.setCheckable(True)
-        # button_action.setShortcut(QKeySequence("Ctrl+p"))
-        toolbar.addAction(button_action)
-
-        toolbar.addSeparator()
-
-        # Debug button
-        button_action2 = QAction(QIcon("bug.png"), "Hide for 2 s", self)
-        button_action2.setStatusTip("Click to hide main window")
-        button_action2.triggered.connect(self.detect_position)
-        # button_action2.setCheckable(True)
-        toolbar.addAction(button_action2)
-
-        # Resolution label
-        resolution = str(screenWidth) + " x " + str(screenHeight)
-        toolbar.addWidget(QLabel(resolution))
-        # toolbar.addWidget(QCheckBox())
-        '''
 
         # Bit at the bottom for tooltips
         self.setStatusBar(QStatusBar(self))
@@ -74,7 +51,6 @@ class MainWindow(QMainWindow):
         # Menu bar
         menu = self.menuBar()
         
-        # tag::menuFile[]
         file_menu = self.menuBar().addMenu("&File")
 
         open_file_action = QAction(
@@ -94,9 +70,7 @@ class MainWindow(QMainWindow):
         save_file_action.setStatusTip("Save current sequence to file")
         save_file_action.triggered.connect(self.save_file)
         file_menu.addAction(save_file_action)
-        # end::menuFile[]
-        
-        # tag::menuHelp[]
+
         help_menu = self.menuBar().addMenu("&Help")
 
         about_action = QAction(
@@ -172,6 +146,7 @@ class MainWindow(QMainWindow):
             self.input_controller.stop()
             self.tb1.play_macro_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
+            self.tb1.delay_checkbox.setChecked(True)
         else:
             self.input_controller.start()
     
@@ -193,9 +168,6 @@ if __name__ == "__main__":
         QCheckBox {
             padding-left: 5px;
             padding-right: 2px;
-        }
-        QDoubleSpinBox {
-        
         }
 
     """)

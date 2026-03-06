@@ -3,6 +3,22 @@ from paths import Paths
 from pynput import keyboard, mouse
 
 class InputController():
+
+    def __init__(self, parent=None):
+        self.parent = parent
+
+        self.kb_listener = keyboard.Listener(
+            on_press = self.on_press,
+            on_release = self.on_release)
+        self.kb_controller = keyboard.Controller()
+
+        self.mouse_listener = mouse.Listener(
+            on_move=self.on_move,
+            on_click=self.on_click,
+            on_scroll=self.on_scroll)
+        self.mouse_controller = mouse.Controller()
+
+
     def on_move(x, y):
         # print('Pointer moved to {0}'.format((x, y)))
         pass
@@ -63,7 +79,7 @@ class InputController():
     def play(self):
         for inpt in self.macro:
             print(inpt)
-
+            sleep(self.parent.tb1.delay_spin.value())
             match inpt["type"]:
                 case "keypress":
                     self.kb_controller.press(inpt["key"])
@@ -79,16 +95,4 @@ class InputController():
                         self.mouse_controller.release(inpt["button"])
 
 
-    def __init__(self):
-        super().__init__()
 
-        self.kb_listener = keyboard.Listener(
-            on_press = self.on_press,
-            on_release = self.on_release)
-        self.kb_controller = keyboard.Controller()
-
-        self.mouse_listener = mouse.Listener(
-            on_move=self.on_move,
-            on_click=self.on_click,
-            on_scroll=self.on_scroll)
-        self.mouse_controller = mouse.Controller()
