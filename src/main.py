@@ -12,17 +12,9 @@ from PySide6.QtWidgets import (QApplication,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog
 )
 
-#:
-#  name: MainWindow
-#  description: Instance of QMainWindow
-#  attributes:
-#    tb1: top toolbar
-#    tb2: left side toolbar
-#  constructor:
-#    params: implicit only
-
 class MainWindow(QMainWindow):
 
+    # Constructor
     def __init__(self, parent=None):
         """Constructor"""
 
@@ -51,9 +43,11 @@ class MainWindow(QMainWindow):
 
         # Menu bar
         menu = self.menuBar()
-        
+
+        # > File menu        
         file_menu = self.menuBar().addMenu("&File")
 
+        # > > Open file
         open_file_action = QAction(
             QIcon(Paths.icon("disk--arrow.png")),
             "Open file...",
@@ -63,6 +57,7 @@ class MainWindow(QMainWindow):
         open_file_action.triggered.connect(self.open_file)
         file_menu.addAction(open_file_action)
 
+        # > > Save file
         save_file_action = QAction(
             QIcon(Paths.icon("disk--pencil.png")),
             "Save sequence as...",
@@ -72,8 +67,10 @@ class MainWindow(QMainWindow):
         save_file_action.triggered.connect(self.save_file)
         file_menu.addAction(save_file_action)
 
+        # > Help menu
         help_menu = self.menuBar().addMenu("&Help")
 
+        # > > About 
         about_action = QAction(
             QIcon(Paths.icon("question.png")),
             "About GUI Macro Tester",
@@ -81,10 +78,9 @@ class MainWindow(QMainWindow):
         )
         about_action.setStatusTip(
             "Find out more about GUI Macro Tester"
-        )  # Hungry!
+        )
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
-
 
     def about(self):
         dlg = AboutDialog()
@@ -106,29 +102,27 @@ class MainWindow(QMainWindow):
             self.browser.setHtml(html)
             self.urlbar.setText(filename)
 
-
+    # Store currently loaded macro as JSON file
     def save_file(self):
-        filename, _ = QFileDialog.getSaveFileName(
-            self,
-            "Save Page As",
-            "",
-            "Hypertext Markup Language (*.htm *.html);;"
-            "All files (*.*)",
-        )
+        mac = self.input_controller.macro
+        if len(mac) == 0:
+            if Paths.debug: print("No sequence to save")
+            return
+        else:
+            filename, _ = QFileDialog.getSaveFileName(
+                self,
+                "Save Sequence As",
+                "",
+                "TW Sequence (*.tws);;"
+                "All files (*.*)",
+            )
 
-        if filename:
-            # Define callback method to handle the write.
-            def writer(html):
+            if filename:
                 with open(filename, "w") as f:
-                    f.write(html)
+                    for inpt in mac:
+                        f.write('%s\n' %inpt)
 
-            self.browser.page().toHtml(writer)
 
-    
-    #
-    # Member functions
-    #
-    
     def add_screen(self):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
         if ok and screen_name:
@@ -140,16 +134,14 @@ class MainWindow(QMainWindow):
             self.tb1.play_macro_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.delay_checkbox.setChecked(True)
+            self.tb1.record_macro_action.setText("Record macro*")
+            self.tb1.record_macro_action.setStatusTip("Record a sequence of inputs")
         else:
             self.input_controller.start()
+            self.tb1.record_macro_action.setText("Stop Recording")
+            self.tb1.record_macro_action.setStatusTip("Finish recording the sequence of inputs")
     
-    #:
-    #  name: play_macro
-    #  description: This is an example zensical comment
-    #  params:
-    #    self: the MainWindow object
-    #  returns: nothing (needn't always bother stating this)
-
+    # Replay the currently loaded macro
     def play_macro(self):
         self.tb1.record_macro_action.setEnabled(False)
         self.input_controller.play()

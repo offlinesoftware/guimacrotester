@@ -18,6 +18,7 @@ class InputController():
             on_scroll=self.on_scroll)
         self.mouse_controller = mouse.Controller()
 
+        self.macro = []
 
     def on_move(x, y):
         # print('Pointer moved to {0}'.format((x, y)))
@@ -72,6 +73,7 @@ class InputController():
         self.mouse_listener.stop()
         # Remove click and release of 'Stop recording' button
         self.macro = self.macro[:-2]
+        # What if we hold down 'Stop recording' the press keys before releasing it?
         if Paths.debug:
             print("\nMacro of length:", len(self.macro))
             print(self.macro)
@@ -93,6 +95,3 @@ class InputController():
                         self.mouse_controller.press(inpt["button"])
                     else:
                         self.mouse_controller.release(inpt["button"])
-
-
-
