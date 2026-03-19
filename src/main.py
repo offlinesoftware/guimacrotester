@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-import sys
+import sys, json
 from about_dialog import AboutDialog
 from screen_tree import ScreenTree
 from toolbar import Toolbar
@@ -101,6 +101,8 @@ class MainWindow(QMainWindow):
             # display content of the file
             for x in f.readlines():
                 print(x, end='')
+                dct = eval(x) # Use json.loads (needs double quotes in each string)
+                mac.append(dct)
 
 
     # Store currently loaded macro as JSON file
