@@ -1,8 +1,1 @@
-{'type': 'keypress', 'key': 'x', 'char': 'x'}
-{'type': 'keypress', 'key': 's', 'char': 's'}
-{'type': 'release', 'key': 'x', 'char': 'x'}
-{'type': 'release', 'key': 's', 'char': 's'}
-{'type': 'keypress', 'key': 'x', 'char': 'x'}
-{'type': 'keypress', 'key': 's', 'char': 's'}
-{'type': 'release', 'key': 'x', 'char': 'x'}
-{'type': 'release', 'key': 's', 'char': 's'}
+[{"type": "click", "x": 575, "y": 140, "button": "Button.left", "pressed": true}, {"type": "click", "x": 575, "y": 140, "button": "Button.left", "pressed": false}, {"type": "keypress", "key": "'a'", "char": "a"}, {"type": "release", "key": "'a'", "char": "a"}, {"type": "keypress", "key": "'r'", "char": "r"}, {"type": "release", "key": "'r'", "char": "r"}, {"type": "keypress", "key": "'s'", "char": "s"}, {"type": "keypress", "key": "'e'", "char": "e"}, {"type": "release", "key": "'s'", "char": "s"}, {"type": "release", "key": "'e'", "char": "e"}]

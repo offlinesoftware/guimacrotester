@@ -6,6 +6,7 @@ from toolbar import Toolbar
 from input_controller import InputController
 # from clickThings import *
 from paths import Paths
+from pynput import mouse
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication,
@@ -96,14 +97,10 @@ class MainWindow(QMainWindow):
         )
 
         if filename:
-            mac = []
-            f = open(filename, "r")
-            # display content of the file
-            for x in f.readlines():
-                print(x, end='')
-                dct = eval(x) # Use json.loads (needs double quotes in each string)
-                mac.append(dct)
-
+            with open(filename, "r") as f:
+                mac = json.load(f)
+            self.input_controller.macro = mac
+            self.tb1.play_macro_action.setEnabled(True)
 
     # Store currently loaded macro as JSON file
     def save_file(self):
@@ -122,8 +119,8 @@ class MainWindow(QMainWindow):
 
             if filename:
                 with open(filename, "w") as f:
-                    for inpt in mac:
-                        f.write('%s\n' %inpt)
+                    json.dump(mac, f)
+
 
     def add_screen(self):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')

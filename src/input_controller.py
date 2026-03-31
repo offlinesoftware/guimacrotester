@@ -25,7 +25,8 @@ class InputController():
         pass
 
     def on_click(self, x, y, button, pressed):
-        m_click = {"type": "click", "x": x, "y": y, "button": button, "pressed": pressed}
+        # Button class is not serializable so save as string
+        m_click = {"type": "click", "x": x, "y": y, "button": str(button), "pressed": pressed}
         self.macro.append(m_click)
         if Paths.debug: 
             print(m_click)
@@ -37,7 +38,7 @@ class InputController():
             print(m_scroll)
 
     def on_press(self, key):
-        keypress = {"type": "keypress", "key": key}
+        keypress = {"type": "keypress", "key": str(key)}
         if hasattr(key, 'char'):
             keypress["char"] = key.char
         self.macro.append(keypress)
@@ -45,7 +46,7 @@ class InputController():
             print(keypress)
 
     def on_release(self, key):
-        release = {"type": "release", "key": key}
+        release = {"type": "release", "key": str(key)}
         if hasattr(key, 'char'):
             release["char"] = key.char
         self.macro.append(release)
@@ -78,20 +79,33 @@ class InputController():
             print("\nMacro of length:", len(self.macro))
             print(self.macro)
 
+    def deserialize_key(self, value: str):
+        # Case 1: Special key like "Key.enter"
+        if value.startswith("Key."):
+            name = value.split(".")[1]
+            return keyboard.Key[name]
+
+        # Case 2: Single character key like "a"
+        if len(value) == 1:
+            return keyboard.KeyCode.from_char(value)
+
+        return value.strip("'")
+    
     def play(self):
         for inpt in self.macro:
             print(inpt)
             sleep(self.parent.tb1.delay_spin.value())
             match inpt["type"]:
                 case "keypress":
-                    self.kb_controller.press(inpt["key"])
+                    self.kb_controller.press(self.deserialize_key(inpt["key"]))
 
                 case "release":
-                    self.kb_controller.release(inpt["key"])
+                    self.kb_controller.release(self.deserialize_key(inpt["key"]))
         
                 case "click":
                     self.mouse_controller.position = (inpt["x"], inpt["y"])
+                    # Mouse 'Button' class is stored as string, so needs converting back
                     if inpt["pressed"]:
-                        self.mouse_controller.press(inpt["button"])
+                        self.mouse_controller.press(mouse.Button[inpt["button"].split(".")[1]])
                     else:
-                        self.mouse_controller.release(inpt["button"])
+                        self.mouse_controller.release(mouse.Button[inpt["button"].split(".")[1]])
