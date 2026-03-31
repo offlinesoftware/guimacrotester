@@ -6,26 +6,32 @@ from toolbar import Toolbar
 from input_controller import InputController
 # from clickThings import *
 from paths import Paths
-from pynput import mouse
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication,
-    QMainWindow, QStatusBar, QInputDialog, QFileDialog
+from PySide6.QtWidgets import (QApplication, QWidget, QTableWidget, QTableWidgetItem,
+    QMainWindow, QStatusBar, QInputDialog, QFileDialog, QVBoxLayout
 )
 
 class MainWindow(QMainWindow):
 
     # Constructor
     def __init__(self, parent=None):
-        """Constructor"""
+        # Constructor
 
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
-        self.setFixedSize(500, 750)
+        self.setFixedSize(800, 800)
 
         self.tree = ScreenTree()
+        container = QWidget()
+        self.sequence_table = QTableWidget()
+        centralVBox = QVBoxLayout(container)
 
-        self.setCentralWidget(self.tree)
+        centralVBox.addWidget(self.tree)
+        centralVBox.addWidget(self.sequence_table)
+        self.setCentralWidget(container)
+
+
 
         # Toolbars
         self.tb1 = Toolbar(self, 1)
@@ -36,6 +42,20 @@ class MainWindow(QMainWindow):
         self.createMenus()
 
         self.input_controller = InputController(parent=self)
+
+    def populate_table(self):
+        mac = self.input_controller.macro
+        self.sequence_table.setRowCount(len(mac))
+
+        for row, entry in enumerate(mac):
+            col = 0
+            for value in entry: # This doesn't work
+                col += 1
+                item = QTableWidgetItem(str(value))
+                print("Table item:")
+                print(str(item))
+                self.sequence_table.setItem(row, col, item)
+
 
     def createMenus(self):
 
