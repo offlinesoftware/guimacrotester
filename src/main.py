@@ -20,17 +20,19 @@ class MainWindow(QMainWindow):
 
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
-        self.setFixedSize(800, 800)
+        self.setFixedSize(1000, 800)
 
         self.tree = ScreenTree()
         container = QWidget()
         self.sequence_table = QTableWidget()
+        self.headers = ["Type", "x", "y", "Button", "Pressed", "Key", "Char"]
+        self.sequence_table.setColumnCount(len(self.headers))
+        self.sequence_table.setHorizontalHeaderLabels(self.headers)
         centralVBox = QVBoxLayout(container)
 
         centralVBox.addWidget(self.tree)
         centralVBox.addWidget(self.sequence_table)
         self.setCentralWidget(container)
-
 
 
         # Toolbars
@@ -48,13 +50,10 @@ class MainWindow(QMainWindow):
         self.sequence_table.setRowCount(len(mac))
 
         for row, entry in enumerate(mac):
-            col = 0
-            for value in entry: # This doesn't work
-                col += 1
-                item = QTableWidgetItem(str(value))
-                print("Table item:")
-                print(str(item))
-                self.sequence_table.setItem(row, col, item)
+            for key, val in entry.items():
+                for col, header in enumerate(self.headers):
+                    if header.lower() == key:
+                        self.sequence_table.setItem(row, col, QTableWidgetItem(str(val)))
 
 
     def createMenus(self):
