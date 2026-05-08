@@ -1,16 +1,15 @@
 # guimacrotester
 GUI Macro Tester
 
-## Running on Linux
+## Running on Debian- or Ubuntu-based Linux
 ```
-{
 sudo apt install libxcb-cursor0
 cd guimacrotester
 python -m venv venv
 source venv/bin/activate
-pip install pyside6 pynput
-python src/main
-}
+pip install pyside6
+pip install pynput
+python src/main.py
 ```
 
 ## To do
