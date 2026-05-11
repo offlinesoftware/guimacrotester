@@ -109,6 +109,8 @@ class MainWindow(QMainWindow):
                 mac = json.load(f)
             self.input_controller.macro = mac
             self.tb1.play_macro_action.setEnabled(True)
+            self.tb1.delay_checkbox.setEnabled(True)
+            self.tb1.delay_checkbox.setChecked(True)
 
     # Store currently loaded macro as JSON file
     def save_file(self):

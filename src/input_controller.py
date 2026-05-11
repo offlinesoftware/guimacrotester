@@ -96,7 +96,8 @@ class InputController():
         for idx, inpt in enumerate(self.macro):
             if Paths.debug:
                 print(idx, inpt, len(self.macro))
-            sleep(self.parent.tb1.delay_spin.value())
+            if self.parent.tb1.delay_checkbox.isChecked():
+                sleep(self.parent.tb1.delay_spin.value())
             match inpt["type"]:
                 case "keypress":
                     self.kb_controller.press(self.deserialize_key(inpt["key"]))
