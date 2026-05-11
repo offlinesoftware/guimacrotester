@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView
 
 class SequenceTable(QTableWidget):
     def __init__(self, parent):
@@ -7,6 +7,9 @@ class SequenceTable(QTableWidget):
         self.headers = ["Type", "x", "y", "Button", "Pressed", "Key", "Char"]
         self.setColumnCount(len(self.headers))
         self.setHorizontalHeaderLabels(self.headers)
+
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
     
     def populate_table(self):
         

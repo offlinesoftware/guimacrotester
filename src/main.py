@@ -9,8 +9,8 @@ from input_controller import InputController
 from paths import Paths
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication, QWidget, QTableWidgetItem,
-    QMainWindow, QStatusBar, QInputDialog, QFileDialog, QVBoxLayout, QToolBar
+from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout,
+    QMainWindow, QStatusBar, QInputDialog, QFileDialog, 
 )
 
 class MainWindow(QMainWindow):
@@ -28,8 +28,8 @@ class MainWindow(QMainWindow):
         self.sequence_table = SequenceTable(self)
         centralVBox = QVBoxLayout(container)
 
-        centralVBox.addWidget(self.tree)
         centralVBox.addWidget(self.sequence_table)
+        centralVBox.addWidget(self.tree)
         self.setCentralWidget(container)
 
 
@@ -111,6 +111,7 @@ class MainWindow(QMainWindow):
             self.tb1.play_macro_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.delay_checkbox.setChecked(True)
+            self.sequence_table.populate_table()
 
     # Store currently loaded macro as JSON file
     def save_file(self):
