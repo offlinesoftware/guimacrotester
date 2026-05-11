@@ -75,7 +75,7 @@ class InputController():
         # Remove click and release of 'Stop recording' button
         self.macro = self.macro[:-2]
         # What if we hold down 'Stop recording' the press keys before releasing it?
-        self.parent.populate_table()
+        self.parent.sequence_table.populate_table()
         if Paths.debug:
             print("\nMacro of length:", len(self.macro))
             print(self.macro)
@@ -93,8 +93,9 @@ class InputController():
         return value.strip("'")
     
     def play(self):
-        for inpt in self.macro:
-            print(inpt)
+        for idx, inpt in enumerate(self.macro):
+            if Paths.debug:
+                print(idx, inpt, len(self.macro))
             sleep(self.parent.tb1.delay_spin.value())
             match inpt["type"]:
                 case "keypress":

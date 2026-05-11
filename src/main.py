@@ -2,14 +2,15 @@
 import sys, json
 from about_dialog import AboutDialog
 from screen_tree import ScreenTree
+from sequence_table import SequenceTable
 from toolbar import Toolbar
 from input_controller import InputController
 # from clickThings import *
 from paths import Paths
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication, QWidget, QTableWidget, QTableWidgetItem,
-    QMainWindow, QStatusBar, QInputDialog, QFileDialog, QVBoxLayout
+from PySide6.QtWidgets import (QApplication, QWidget, QTableWidgetItem,
+    QMainWindow, QStatusBar, QInputDialog, QFileDialog, QVBoxLayout, QToolBar
 )
 
 class MainWindow(QMainWindow):
@@ -24,10 +25,7 @@ class MainWindow(QMainWindow):
 
         self.tree = ScreenTree()
         container = QWidget()
-        self.sequence_table = QTableWidget()
-        self.headers = ["Type", "x", "y", "Button", "Pressed", "Key", "Char"]
-        self.sequence_table.setColumnCount(len(self.headers))
-        self.sequence_table.setHorizontalHeaderLabels(self.headers)
+        self.sequence_table = SequenceTable(self)
         centralVBox = QVBoxLayout(container)
 
         centralVBox.addWidget(self.tree)
@@ -39,23 +37,14 @@ class MainWindow(QMainWindow):
         self.tb1 = Toolbar(self, 1)
         self.addToolBar(self.tb1)
         self.tb2 = Toolbar(self, 2)
-        self.addToolBar(Qt.LeftToolBarArea, self.tb2)
+        # Qt.LeftToolBarArea works fine but PyLance whinges about it
+        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.tb2) 
 
         self.createMenus()
 
         self.input_controller = InputController(parent=self)
 
-    def populate_table(self):
-        mac = self.input_controller.macro
-        self.sequence_table.setRowCount(len(mac))
-
-        for row, entry in enumerate(mac):
-            for key, val in entry.items():
-                for col, header in enumerate(self.headers):
-                    if header.lower() == key:
-                        self.sequence_table.setItem(row, col, QTableWidgetItem(str(val)))
-
-
+    
     def createMenus(self):
 
         # Bit at the bottom for tooltips
