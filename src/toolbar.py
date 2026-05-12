@@ -56,15 +56,25 @@ class Toolbar(QToolBar):
                 self.add_screen_action.triggered.connect(self.parent().add_screen)
                 self.addAction(self.add_screen_action)
 
-                # Table debug button
-                self.table_debug_action = QAction(
+                # Move up button
+                self.move_up_action = QAction(
                     # QIcon(Paths.icon("ui-tab--plus.png")), 
-                    "Table debug",
+                    "Move up",
                     self
                 )
-                self.table_debug_action.setStatusTip("Add a new group of screen co-ordinates")
-                self.table_debug_action.triggered.connect(self.parent().sequence_table.to_macro)
-                self.addAction(self.table_debug_action)
+                self.move_up_action.setStatusTip("Move one row of the input sequence table upwards")
+                self.move_up_action.triggered.connect(self.parent().sequence_table.move_up)
+                self.addAction(self.move_up_action)
+
+                # Move down button
+                self.move_down_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Move down",
+                    self
+                )
+                self.move_down_action.setStatusTip("Move one row of the input sequence table downwards")
+                self.move_down_action.triggered.connect(self.parent().sequence_table.move_down)
+                self.addAction(self.move_down_action)
 
             case _:
                 if Paths.debug:

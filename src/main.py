@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
 
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
-        self.setFixedSize(1000, 800)
+        self.setFixedSize(960, 700)
 
         self.tree = ScreenTree()
         container = QWidget()
@@ -153,6 +153,7 @@ class MainWindow(QMainWindow):
     
     # Replay the currently loaded macro
     def play_macro(self):
+        self.sequence_table.to_macro()
         self.tb1.record_macro_action.setEnabled(False)
         self.input_controller.play()
         self.tb1.record_macro_action.setEnabled(True)

@@ -32,24 +32,18 @@ class InputController():
     def on_scroll(self, x, y, dx, dy):
         m_scroll = {"type": "scroll", "x": x, "y": y, "dx": dx, "dy": dy}
         self.macro.append(m_scroll)
-        if Paths.debug: 
-            print(m_scroll)
 
     def on_press(self, key):
         keypress = {"type": "keypress", "key": str(key)}
         if hasattr(key, 'char'):
             keypress["char"] = key.char
         self.macro.append(keypress)
-        if Paths.debug: 
-            print(keypress)
 
     def on_release(self, key):
         release = {"type": "release", "key": str(key)}
         if hasattr(key, 'char'):
             release["char"] = key.char
         self.macro.append(release)
-        if Paths.debug: 
-            print(release)
 
     def start(self):
         if Paths.debug:
@@ -80,6 +74,7 @@ class InputController():
 
     def deserialize_key(self, value: str):
         # Case 1: Special key like "Key.enter"
+        
         if value.startswith("Key."):
             name = value.split(".")[1]
             return keyboard.Key[name]
@@ -91,25 +86,29 @@ class InputController():
         return value.strip("'")
     
     def play(self):
-        for idx, inpt in enumerate(self.macro):
-            if Paths.debug:
-                print(idx, inpt, len(self.macro))
+        for inpt in self.macro:
+
             if self.parent.tb1.delay_checkbox.isChecked():
                 sleep(self.parent.tb1.delay_spin.value())
             match inpt["type"]:
                 case "keypress":
-                    self.kb_controller.press(self.deserialize_key(inpt["key"]))
+                    if Paths.debug: print("Pressing key: ", inpt['key'])
+                    self.kb_controller.press(self.deserialize_key(inpt['key']))
 
                 case "release":
+                    if Paths.debug: print("Releasing key: ", inpt['key'])
                     self.kb_controller.release(self.deserialize_key(inpt["key"]))
         
                 case "click":
                     self.mouse_controller.position = (inpt["x"], inpt["y"])
                     # Mouse 'Button' class is stored as string, so needs converting back
                     if inpt["pressed"]:
+                        if Paths.debug: print(inpt['button'], " down at: ", inpt['x'], inpt['y'])
                         self.mouse_controller.press(mouse.Button[inpt["button"].split(".")[1]])
                     else:
+                        if Paths.debug: print(inpt['button'], " up at: ", inpt['x'], inpt['y'])
                         self.mouse_controller.release(mouse.Button[inpt["button"].split(".")[1]])
 
                 case "scroll":
+                    if Paths.debug: print("Scrolling by: ", inpt['x'], inpt['y'])
                     self.mouse_controller.scroll(inpt['dx'], inpt['dy'])
