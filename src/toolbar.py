@@ -56,6 +56,16 @@ class Toolbar(QToolBar):
                 self.add_screen_action.triggered.connect(self.parent().add_screen)
                 self.addAction(self.add_screen_action)
 
+                # Table debug button
+                self.table_debug_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Table debug",
+                    self
+                )
+                self.table_debug_action.setStatusTip("Add a new group of screen co-ordinates")
+                self.table_debug_action.triggered.connect(self.parent().sequence_table.to_macro)
+                self.addAction(self.table_debug_action)
+
             case _:
                 if Paths.debug:
                     print("Attempt to construct undefined toolbar:", tb_num)

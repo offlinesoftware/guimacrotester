@@ -9,7 +9,10 @@ class SequenceTable(QTableWidget):
         self.setHorizontalHeaderLabels(self.headers)
 
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
+        self.setDragEnabled(False)
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.setSelectionMode(QAbstractItemView.SingleSelection)   # or MultiSelection if you want Ctrl-click multi-row
+        
     
     def populate_table(self):
         
@@ -23,3 +26,15 @@ class SequenceTable(QTableWidget):
                 for col, header in enumerate(self.headers):
                     if header.lower() == key:
                         self.setItem(row, col, QTableWidgetItem(str(val)))
+    
+    def to_macro(self):
+        mac = []
+        for r in range(self.rowCount()):
+            row_dict = {}
+            for c, header in enumerate(h.lower() for h in self.headers):
+                item = self.item(r, c)
+                row_dict[header] = item.text() if item else ""
+            print(row_dict)
+            mac.append(row_dict)
+        
+        self.parent.input_controller.macro = mac

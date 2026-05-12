@@ -28,8 +28,6 @@ class InputController():
         # Button class is not serializable so save as string
         m_click = {"type": "click", "x": x, "y": y, "button": str(button), "pressed": pressed}
         self.macro.append(m_click)
-        if Paths.debug: 
-            print(m_click)
 
     def on_scroll(self, x, y, dx, dy):
         m_scroll = {"type": "scroll", "x": x, "y": y, "dx": dx, "dy": dy}
@@ -112,3 +110,6 @@ class InputController():
                         self.mouse_controller.press(mouse.Button[inpt["button"].split(".")[1]])
                     else:
                         self.mouse_controller.release(mouse.Button[inpt["button"].split(".")[1]])
+
+                case "scroll":
+                    self.mouse_controller.scroll(inpt['dx'], inpt['dy'])

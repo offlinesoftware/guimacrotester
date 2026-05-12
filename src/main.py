@@ -32,7 +32,6 @@ class MainWindow(QMainWindow):
         centralVBox.addWidget(self.tree)
         self.setCentralWidget(container)
 
-
         # Toolbars
         self.tb1 = Toolbar(self, 1)
         self.addToolBar(self.tb1)
@@ -106,15 +105,16 @@ class MainWindow(QMainWindow):
 
         if filename:
             with open(filename, "r") as f:
-                mac = json.load(f)
-            self.input_controller.macro = mac
+                self.input_controller.macro = json.load(f)
+            self.sequence_table.populate_table()
             self.tb1.play_macro_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.delay_checkbox.setChecked(True)
-            self.sequence_table.populate_table()
+            
 
     # Store currently loaded macro as JSON file
     def save_file(self):
+        if Paths.debug: print("\nEntering save_file")
         mac = self.input_controller.macro
         if len(mac) == 0:
             if Paths.debug: print("No sequence to save")
