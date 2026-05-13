@@ -1,3 +1,4 @@
+from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
 class SequenceTable(QTableWidget):
@@ -34,6 +35,7 @@ class SequenceTable(QTableWidget):
                         self.setItem(row, col, QTableWidgetItem(str(val)))
     
     def to_macro(self):
+        if Paths.debug: print("\nMacro extracted from table:")
         mac = []
         for r in range(self.rowCount()):
             row_dict = {}
@@ -42,7 +44,7 @@ class SequenceTable(QTableWidget):
                 row_dict[header] = item.text() if item else ""
             if row_dict['pressed'] == 'True': row_dict['pressed'] = True
             if row_dict['pressed'] == 'False': row_dict['pressed'] = False
-            print(row_dict)
+            if Paths.debug: print(row_dict)
             mac.append(row_dict)
         
         self.parent.input_controller.macro = mac

@@ -20,7 +20,7 @@ class InputController():
 
         self.macro = []
 
-    def on_move(x, y):
+    def on_move(self, x, y):
         # print('Pointer moved to {0}'.format((x, y)))
         pass
 
@@ -85,7 +85,10 @@ class InputController():
 
         return value.strip("'")
     
+    
+    
     def play(self):
+        if Paths.debug: print("\nPlaying macro of length", len(self.macro))
         for inpt in self.macro:
 
             if self.parent.tb1.delay_checkbox.isChecked():
@@ -100,7 +103,7 @@ class InputController():
                     self.kb_controller.release(self.deserialize_key(inpt["key"]))
         
                 case "click":
-                    self.mouse_controller.position = (inpt["x"], inpt["y"])
+                    self.mouse_controller.position = (int(inpt["x"]), int(inpt["y"]))
                     # Mouse 'Button' class is stored as string, so needs converting back
                     if inpt["pressed"]:
                         if Paths.debug: print(inpt['button'], " down at: ", inpt['x'], inpt['y'])
@@ -112,3 +115,5 @@ class InputController():
                 case "scroll":
                     if Paths.debug: print("Scrolling by: ", inpt['x'], inpt['y'])
                     self.mouse_controller.scroll(inpt['dx'], inpt['dy'])
+        return
+    
