@@ -30,18 +30,20 @@ class Toolbar(QToolBar):
                 self.play_macro_action.setEnabled(False)
                 self.addAction(self.play_macro_action)
 
-                self.delay_checkbox = QCheckBox("Delay:")
+                self.addSeparator()
+
+                self.delay_checkbox = QCheckBox("Delay (ms) :")
                 
                 self.delay_checkbox.stateChanged.connect(self.on_state_changed)
                 self.delay_checkbox.setEnabled(False)
                 self.addWidget(self.delay_checkbox)
                 
                 self.delay_spin = QDoubleSpinBox()
-                self.delay_spin.setRange(0, 10.0)
-                self.delay_spin.setDecimals(1)
-                self.delay_spin.setSingleStep(0.1)
-                self.delay_spin.setFixedWidth(70)
-                self.delay_spin.setValue(0.2)
+                self.delay_spin.setRange(0, 1000)
+                self.delay_spin.setDecimals(0)
+                self.delay_spin.setSingleStep(50)
+                self.delay_spin.setFixedWidth(100)
+                self.delay_spin.setValue(100)
                 self.delay_spin.setEnabled(False)
                 self.addWidget(self.delay_spin)
                 

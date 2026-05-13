@@ -1,4 +1,4 @@
-from time import sleep
+import time
 from paths import Paths
 from pynput import keyboard, mouse
 
@@ -88,11 +88,12 @@ class InputController():
     
     
     def play(self):
+        start = time.perf_counter()
         if Paths.debug: print("\nPlaying macro of length", len(self.macro))
         for inpt in self.macro:
 
             if self.parent.tb1.delay_checkbox.isChecked():
-                sleep(self.parent.tb1.delay_spin.value())
+                time.sleep(self.parent.tb1.delay_spin.value() / 1000)
             match inpt["type"]:
                 case "keypress":
                     if Paths.debug: print("Pressing key: ", inpt['key'])
@@ -115,5 +116,8 @@ class InputController():
                 case "scroll":
                     if Paths.debug: print("Scrolling by: ", inpt['x'], inpt['y'])
                     self.mouse_controller.scroll(inpt['dx'], inpt['dy'])
-        return
+        if Paths.debug:
+            end = time.perf_counter()
+            print(f"Execution time: {end - start:.6f} seconds")
+
     
