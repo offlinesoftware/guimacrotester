@@ -18,6 +18,10 @@ python src/main.py
   - Bottom half to take macros from file or current recording
   - Need to name them
 
+- Programatic features
+  - Allow for-loops with incrementing values
+  - Allow running of macro with custom string for eg. program name
+
 - Allow editing of macros via sequence table
   - Enable or disable cells as editable appropriately
   - Call things different names in table compared to macro dict
