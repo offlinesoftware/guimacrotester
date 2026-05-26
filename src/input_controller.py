@@ -90,6 +90,9 @@ class InputController():
     def play(self):
         start = time.perf_counter()
         if Paths.debug: print("\nPlaying macro of length", len(self.macro))
+        return_position = self.mouse_controller.position
+        if Paths.debug:
+            print('Return position is {0}'.format(return_position))
         for inpt in self.macro:
 
             if self.parent.tb1.delay_checkbox.isChecked():
@@ -119,5 +122,7 @@ class InputController():
         if Paths.debug:
             end = time.perf_counter()
             print(f"Execution time: {end - start:.6f} seconds")
+        if self.parent.tb1.return_checkbox.isChecked():
+            self.mouse_controller.position = return_position
 
     

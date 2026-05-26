@@ -46,6 +46,11 @@ class Toolbar(QToolBar):
                 self.delay_spin.setValue(100)
                 self.delay_spin.setEnabled(False)
                 self.addWidget(self.delay_spin)
+
+                self.addSeparator()
+                self.return_checkbox = QCheckBox("Return mouse cursor after execution")
+                self.return_checkbox.setChecked(True)
+                self.addWidget(self.return_checkbox)
                 
             case 2:
                 # 'Add new screen' button
