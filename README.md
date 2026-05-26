@@ -17,6 +17,7 @@ python src/main.py
   - Swap sequence table to top half of display
   - Bottom half to take macros from file or current recording
   - Need to name them
+  - Allow sending any sequence in macrosequence up to editing table
 
 - Programatic features
   - Allow for-loops with incrementing values

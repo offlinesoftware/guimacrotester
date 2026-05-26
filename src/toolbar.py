@@ -18,6 +18,7 @@ class Toolbar(QToolBar):
                 self.record_macro_action.setStatusTip("Record a sequence of inputs")
                 self.record_macro_action.triggered.connect(self.parent().record_macro)
                 self.addAction(self.record_macro_action)
+                
 
                 # 'Play macro' button
                 self.play_macro_action = QAction(
@@ -32,12 +33,6 @@ class Toolbar(QToolBar):
 
                 self.addSeparator()
 
-                self.delay_checkbox = QCheckBox("Delay (ms) :")
-                
-                self.delay_checkbox.stateChanged.connect(self.on_state_changed)
-                self.delay_checkbox.setEnabled(False)
-                self.addWidget(self.delay_checkbox)
-                
                 self.delay_spin = QDoubleSpinBox()
                 self.delay_spin.setRange(0, 1000)
                 self.delay_spin.setDecimals(0)
@@ -45,23 +40,35 @@ class Toolbar(QToolBar):
                 self.delay_spin.setFixedWidth(100)
                 self.delay_spin.setValue(100)
                 self.delay_spin.setEnabled(False)
+
+
+                self.delay_checkbox = QCheckBox("Delay (ms) :")
+                
+                self.delay_checkbox.stateChanged.connect(self.on_state_changed)
+                self.delay_checkbox.setChecked(True)
+                self.delay_checkbox.setEnabled(False)
+                self.addWidget(self.delay_checkbox)
+                
+
                 self.addWidget(self.delay_spin)
 
                 self.addSeparator()
                 self.return_checkbox = QCheckBox("Return mouse cursor after execution")
                 self.return_checkbox.setChecked(True)
+                self.return_checkbox.setEnabled(False)
                 self.addWidget(self.return_checkbox)
                 
             case 2:
-                # 'Add new screen' button
-                self.add_screen_action = QAction(
+                # 'Clear table' button
+                self.clear_table_action = QAction(
                     # QIcon(Paths.icon("ui-tab--plus.png")), 
-                    "Add new screen",
+                    "Clear sequence",
                     self
                 )
-                self.add_screen_action.setStatusTip("Add a new group of screen co-ordinates")
-                self.add_screen_action.triggered.connect(self.parent().add_screen)
-                self.addAction(self.add_screen_action)
+                self.clear_table_action.setStatusTip("Clear the current sequence shown in the top table")
+                self.clear_table_action.triggered.connect(self.parent().clear_table)
+                self.clear_table_action.setEnabled(False)
+                self.addAction(self.clear_table_action)
 
                 # Move up button
                 self.move_up_action = QAction(

@@ -10,7 +10,7 @@ from paths import Paths
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout,
-    QMainWindow, QStatusBar, QInputDialog, QFileDialog
+    QMainWindow, QStatusBar, QInputDialog, QFileDialog, QMessageBox
 )
 
 class MainWindow(QMainWindow):
@@ -137,14 +137,42 @@ class MainWindow(QMainWindow):
         screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
         if ok and screen_name:
             self.tree.new_screen(screen_name)
+    
+    def clear_table(self):
+        result = QMessageBox.question(
+            self,
+            "Confirm clear",
+            "Really clear the current sequence?",
+            QMessageBox.Ok | QMessageBox.Cancel
+        )
+        if result == QMessageBox.Ok:
+            print("Clearing the current sequence")
+            self.sequence_table.clearContents()
+            self.set_sequence_available(False)
+        elif result == QMessageBox.Cancel:
+            if Paths.debug:
+                print("Cancelled clearing the sequence")
+            return
+    
+    def set_sequence_available(self, is_available):
+        if is_available:
+            self.tb1.play_macro_action.setEnabled(True)
+            self.tb1.delay_checkbox.setEnabled(True)
+            self.tb1.return_checkbox.setEnabled(True)
+            self.tb2.clear_table_action.setEnabled(True)
+        else:
+            self.tb1.play_macro_action.setEnabled(False)
+            self.tb1.delay_checkbox.setEnabled(False)
+            self.tb1.return_checkbox.setEnabled(False)
+            self.tb2.clear_table_action.setEnabled(False)
+            self.tb1.record_macro_action.setText("Record macro")
 
     def record_macro(self):
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
-            self.tb1.play_macro_action.setEnabled(True)
-            self.tb1.delay_checkbox.setEnabled(True)
-            self.tb1.delay_checkbox.setChecked(True)
-            self.tb1.record_macro_action.setText("Record macro*")
+            if len(self.input_controller.macro) > 0:
+                self.set_sequence_available(True)
+                self.tb1.record_macro_action.setText("Record macro*")
             self.tb1.record_macro_action.setStatusTip("Record a sequence of inputs")
         else:
             self.input_controller.start()
