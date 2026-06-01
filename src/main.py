@@ -1,7 +1,8 @@
 # This Python file uses the following encoding: utf-8
 import sys, json
 from about_dialog import AboutDialog
-from screen_tree import ScreenTree
+#from screen_tree import ScreenTree
+from macro_sequence import MacroSequenceList
 from sequence_table import SequenceTable
 from toolbar import Toolbar
 from input_controller import InputController
@@ -9,7 +10,7 @@ from input_controller import InputController
 from paths import Paths
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout,
+from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog, QMessageBox
 )
 
@@ -23,27 +24,38 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("GUI Macro Tester")
         self.setFixedSize(960, 700)
 
-        self.tree = ScreenTree()
+        #self.tree = ScreenTree()
         container = QWidget()
         self.sequence_table = SequenceTable(self)
+        
+        self.add_to_ms_button = QPushButton("Add to macro-sequence")
+        self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
+        self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-090.png")))
+        
+        self.ms_list = MacroSequenceList(self)
         centralVBox = QVBoxLayout(container)
 
         centralVBox.addWidget(self.sequence_table)
-        centralVBox.addWidget(self.tree)
+        #centralVBox.addWidget(self.tree)
+        centralVBox.addWidget(self.add_to_ms_button)
+        centralVBox.addWidget(self.ms_list)
         self.setCentralWidget(container)
 
         # Toolbars
         self.tb1 = Toolbar(self, 1)
         self.addToolBar(self.tb1)
         self.tb2 = Toolbar(self, 2)
-        # Qt.LeftToolBarArea works fine but PyLance whinges about it
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.tb2) 
 
         self.createMenus()
 
         self.input_controller = InputController(parent=self)
 
-    
+    def add_seq_to_ms(self):
+        sequence_name, ok = QInputDialog.getText(self, 'Enter sequence name', 'Name of new sequence:')
+        if ok and sequence_name:
+            self.ms_list.import_current_seq(sequence_name)
+
     def createMenus(self):
 
         # Bit at the bottom for tooltips

@@ -2,8 +2,8 @@ from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
 class SequenceTable(QTableWidget):
-    def __init__(self, parent):
-        super(SequenceTable, self).__init__(parent)
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.parent = parent
         self.headers = ["Type", "x", "y", "dx", "dy", "Button", "Pressed", "Key", "Char"]
         self.setColumnCount(len(self.headers))
