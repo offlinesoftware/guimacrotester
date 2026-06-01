@@ -50,6 +50,8 @@ class SequenceTable(QTableWidget):
         self.parent.input_controller.macro = mac
     
     def move_up(self):
+        if Paths.debug:
+            print(self.selectedItems())
         row = self.currentRow()
         if row <= 0:
             return  # already at top, nothing to do
@@ -68,6 +70,9 @@ class SequenceTable(QTableWidget):
         self.selectRow(row - 1)
     
     def move_down(self):
+        if not self.selectedItems():
+            return
+        
         row = self.currentRow()
         if row >= self.rowCount():
             return  # already at bottom, nothing to do

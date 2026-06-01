@@ -12,6 +12,7 @@ python src/main.py
 ```
 
 ## To do
+- Replace macro_sequence list with two-column table
 - Allow chaining of macros
   - ~~Swap sequence table to top half of display~~
   - Bottom half to take macros from file or current recording
