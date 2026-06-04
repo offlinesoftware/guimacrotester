@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.add_to_ms_button = QPushButton("Add to macro-sequence")
         self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
         self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-090.png")))
+        self.add_to_ms_button.setEnabled(False)
         
         self.ms_list = MacroSequenceList(self)
         centralVBox = QVBoxLayout(container)
@@ -172,12 +173,14 @@ class MainWindow(QMainWindow):
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.return_checkbox.setEnabled(True)
             self.tb2.clear_table_action.setEnabled(True)
+            self.add_to_ms_button.setEnabled(True)
         else:
             self.tb1.play_macro_action.setEnabled(False)
             self.tb1.delay_checkbox.setEnabled(False)
             self.tb1.return_checkbox.setEnabled(False)
             self.tb2.clear_table_action.setEnabled(False)
             self.tb1.record_macro_action.setText("Record macro")
+            self.add_to_ms_button(False)
 
     def record_macro(self):
         if self.input_controller.kb_listener.running:
