@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
         self.setFixedSize(960, 700)
+        self.setWindowIcon(QIcon(Paths.icon("tw.png")))
 
         #self.tree = ScreenTree()
         container = QWidget()
