@@ -2,20 +2,27 @@ from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
 class SequenceTable(QTableWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, is_macro_sequence=False):
         super().__init__(parent)
         self.parent = parent
-        self.headers = ["Type", "x", "y", "dx", "dy", "Button", "Pressed", "Key", "Char"]
+
+        if is_macro_sequence:
+            self.headers = ["Name", "Sequence"]
+        else:
+            self.headers = ["Type", "x", "y", "dx", "dy", "Button", "Pressed", "Key", "Char"]
+        
         self.setColumnCount(len(self.headers))
         self.setHorizontalHeaderLabels(self.headers)
-
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setDragEnabled(False)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)   # or MultiSelection if you want Ctrl-click multi-row
         
-        self.setColumnWidth(3, 50)
-        self.setColumnWidth(4, 50)
+        if is_macro_sequence:
+            self.setColumnWidth(1, 700)
+        else:
+            self.setColumnWidth(3, 50)
+            self.setColumnWidth(4, 50)
 
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)
@@ -23,7 +30,7 @@ class SequenceTable(QTableWidget):
 
     def populate_table(self):
         
-        mac = self.parent.input_controller.macro
+        mac = self.parent.input_controller.sequence
         self.setRowCount(len(mac))
         
         self.clearContents()
@@ -34,8 +41,8 @@ class SequenceTable(QTableWidget):
                     if header.lower() == key:
                         self.setItem(row, col, QTableWidgetItem(str(val)))
     
-    def to_macro(self):
-        if Paths.debug: print("\nMacro extracted from table:")
+    def to_sequence(self):
+        if Paths.debug: print("\nsequence extracted from table:")
         mac = []
         for r in range(self.rowCount()):
             row_dict = {}
@@ -47,7 +54,7 @@ class SequenceTable(QTableWidget):
             if Paths.debug: print(row_dict)
             mac.append(row_dict)
         
-        self.parent.input_controller.macro = mac
+        self.parent.input_controller.sequence = mac
     
     def move_up(self):
         if Paths.debug:
@@ -89,3 +96,14 @@ class SequenceTable(QTableWidget):
 
         # Move selection to the new row
         self.selectRow(row + 1)
+
+    def import_current_seq(self, seq_name):
+
+        self.parent.sequence_table.to_sequence()
+        # self.sequence_list.append(mac)
+        # self.parent.ms_list.addItem(seq_name + ": " + str(mac))
+        
+        row = self.rowCount()
+        self.insertRow(row)
+        self.setItem(row, 0, QTableWidgetItem(seq_name))
+        self.setItem(row, 1, QTableWidgetItem(str(self.parent.input_controller.sequence)))

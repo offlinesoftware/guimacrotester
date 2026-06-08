@@ -9,27 +9,26 @@ class Toolbar(QToolBar):
         self.setIconSize(QSize(16, 16))
         match tb_num:
             case 1:
-                # 'Record macro' button
-                self.record_macro_action = QAction(
+                # 'Record sequence' button
+                self.record_sequence_action = QAction(
                     # QIcon(Paths.icon("plus.png")), 
-                    "Record macro",
+                    "Record sequence",
                     self
                 )
-                self.record_macro_action.setStatusTip("Record a sequence of inputs")
-                self.record_macro_action.triggered.connect(self.parent().record_macro)
-                self.addAction(self.record_macro_action)
+                self.record_sequence_action.setStatusTip("Record a sequence of inputs")
+                self.record_sequence_action.triggered.connect(self.parent().record_sequence)
+                self.addAction(self.record_sequence_action)
                 
-
-                # 'Play macro' button
-                self.play_macro_action = QAction(
+                # 'Play sequence' button
+                self.play_sequence_action = QAction(
                     # QIcon(Paths.icon("plus.png")), 
-                    "Play macro",
+                    "Play sequence",
                     self
                 )
-                self.play_macro_action.setStatusTip("Play back the recorded sequence of inputs")
-                self.play_macro_action.triggered.connect(self.parent().play_macro)
-                self.play_macro_action.setEnabled(False)
-                self.addAction(self.play_macro_action)
+                self.play_sequence_action.setStatusTip("Play back the recorded sequence of inputs")
+                self.play_sequence_action.triggered.connect(self.parent().play_sequence)
+                self.play_sequence_action.setEnabled(False)
+                self.addAction(self.play_sequence_action)
 
                 self.addSeparator()
 

@@ -11,12 +11,12 @@ class AboutDialog(QDialog):
         self.buttonBox = QDialogButtonBox(QBtn)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
-        self.setWindowTitle("About GUI Macro Tester")
+        self.setWindowTitle("About GUI sequence Tester")
         self.setFixedWidth(300)
 
         layout = QVBoxLayout()
 
-        title = QLabel("GUI Macro Tester")
+        title = QLabel("GUI sequence Tester")
         font = title.font()
         font.setPointSize(20)
         title.setFont(font)

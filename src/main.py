@@ -1,8 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import sys, json
 from about_dialog import AboutDialog
-#from screen_tree import ScreenTree
-from macro_sequence import MacroSequenceList
 from sequence_table import SequenceTable
 from toolbar import Toolbar
 from input_controller import InputController
@@ -22,25 +20,26 @@ class MainWindow(QMainWindow):
 
         super().__init__(parent)
         self.setWindowTitle("GUI Macro Tester")
-        self.setFixedSize(960, 700)
+        self.setFixedSize(970, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
 
         #self.tree = ScreenTree()
         container = QWidget()
         self.sequence_table = SequenceTable(self)
+        self.ms_table = SequenceTable(self, True)
         
         self.add_to_ms_button = QPushButton("Add to macro-sequence")
         self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
         self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-090.png")))
         self.add_to_ms_button.setEnabled(False)
         
-        self.ms_list = MacroSequenceList(self)
+        # self.ms_list = sequenceSequenceList(self)
         centralVBox = QVBoxLayout(container)
 
         centralVBox.addWidget(self.sequence_table)
-        #centralVBox.addWidget(self.tree)
+        # centralVBox.addWidget(self.tree)
         centralVBox.addWidget(self.add_to_ms_button)
-        centralVBox.addWidget(self.ms_list)
+        centralVBox.addWidget(self.ms_table)
         self.setCentralWidget(container)
 
         # Toolbars
@@ -56,7 +55,7 @@ class MainWindow(QMainWindow):
     def add_seq_to_ms(self):
         sequence_name, ok = QInputDialog.getText(self, 'Enter sequence name', 'Name of new sequence:')
         if ok and sequence_name:
-            self.ms_list.import_current_seq(sequence_name)
+            self.ms_table.import_current_seq(sequence_name)
 
     def createMenus(self):
 
@@ -95,11 +94,11 @@ class MainWindow(QMainWindow):
         # > > About 
         about_action = QAction(
             QIcon(Paths.icon("question.png")),
-            "About GUI Macro Tester",
+            "About GUI sequence Tester",
             self,
         )
         about_action.setStatusTip(
-            "Find out more about GUI Macro Tester"
+            "Find out more about GUI sequence Tester"
         )
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
@@ -119,17 +118,17 @@ class MainWindow(QMainWindow):
 
         if filename:
             with open(filename, "r") as f:
-                self.input_controller.macro = json.load(f)
+                self.input_controller.sequence = json.load(f)
             self.sequence_table.populate_table()
-            self.tb1.play_macro_action.setEnabled(True)
+            self.tb1.play_sequence_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.delay_checkbox.setChecked(True)
             
 
-    # Store currently loaded macro as JSON file
+    # Store currently loaded sequence as JSON file
     def save_file(self):
         if Paths.debug: print("\nEntering save_file")
-        mac = self.input_controller.macro
+        mac = self.input_controller.sequence
         if len(mac) == 0:
             if Paths.debug: print("No sequence to save")
             return
@@ -170,37 +169,37 @@ class MainWindow(QMainWindow):
     
     def set_sequence_available(self, is_available):
         if is_available:
-            self.tb1.play_macro_action.setEnabled(True)
+            self.tb1.play_sequence_action.setEnabled(True)
             self.tb1.delay_checkbox.setEnabled(True)
             self.tb1.return_checkbox.setEnabled(True)
             self.tb2.clear_table_action.setEnabled(True)
             self.add_to_ms_button.setEnabled(True)
         else:
-            self.tb1.play_macro_action.setEnabled(False)
+            self.tb1.play_sequence_action.setEnabled(False)
             self.tb1.delay_checkbox.setEnabled(False)
             self.tb1.return_checkbox.setEnabled(False)
             self.tb2.clear_table_action.setEnabled(False)
-            self.tb1.record_macro_action.setText("Record macro")
+            self.tb1.record_sequence_action.setText("Record sequence")
             self.add_to_ms_button(False)
 
-    def record_macro(self):
+    def record_sequence(self):
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
-            if len(self.input_controller.macro) > 0:
+            if len(self.input_controller.sequence) > 0:
                 self.set_sequence_available(True)
-                self.tb1.record_macro_action.setText("Record macro*")
-            self.tb1.record_macro_action.setStatusTip("Record a sequence of inputs")
+                self.tb1.record_sequence_action.setText("Record sequence*")
+            self.tb1.record_sequence_action.setStatusTip("Record a sequence of inputs")
         else:
             self.input_controller.start()
-            self.tb1.record_macro_action.setText("Stop Recording")
-            self.tb1.record_macro_action.setStatusTip("Finish recording the sequence of inputs")
+            self.tb1.record_sequence_action.setText("Stop Recording")
+            self.tb1.record_sequence_action.setStatusTip("Finish recording the sequence of inputs")
     
-    # Replay the currently loaded macro
-    def play_macro(self):
-        self.sequence_table.to_macro()
-        self.tb1.record_macro_action.setEnabled(False)
+    # Replay the currently loaded sequence
+    def play_sequence(self):
+        self.sequence_table.to_sequence()
+        self.tb1.record_sequence_action.setEnabled(False)
         self.input_controller.play()
-        self.tb1.record_macro_action.setEnabled(True)
+        self.tb1.record_sequence_action.setEnabled(True)
     
 
 # Run the application
