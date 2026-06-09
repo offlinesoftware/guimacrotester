@@ -4,6 +4,7 @@ from pynput import keyboard, mouse
 
 class InputController():
 
+    # Constructor
     def __init__(self, parent=None):
         self.parent = parent
 
@@ -20,31 +21,38 @@ class InputController():
 
         self.sequence = []
 
+    
+    # Don't record changes in mouse position
     def on_move(self, x, y):
         # print('Pointer moved to {0}'.format((x, y)))
         pass
 
+    # Button class is not serializable so save as string
     def on_click(self, x, y, button, pressed):
-        # Button class is not serializable so save as string
         m_click = {"type": "click", "x": x, "y": y, "button": str(button), "pressed": pressed}
         self.sequence.append(m_click)
 
+    # Capture mousewheel scroll events
     def on_scroll(self, x, y, dx, dy):
         m_scroll = {"type": "scroll", "x": x, "y": y, "dx": dx, "dy": dy}
         self.sequence.append(m_scroll)
 
+    # Press of keyboard buttons (not mouse clicks)
     def on_press(self, key):
         keypress = {"type": "keypress", "key": str(key)}
         if hasattr(key, 'char'):
             keypress["char"] = key.char
         self.sequence.append(keypress)
 
+    # Release of keyboard buttons (not mouse clicks)
     def on_release(self, key):
         release = {"type": "release", "key": str(key)}
         if hasattr(key, 'char'):
             release["char"] = key.char
         self.sequence.append(release)
 
+
+    # Triggered by 'Record sequence' button
     def start(self):
         if Paths.debug:
             print("\nStarting new sequence")
@@ -61,6 +69,8 @@ class InputController():
             on_scroll=self.on_scroll)
         self.mouse_listener.start()
     
+
+    # Triggered by 'Record sequence' button (when already recording)
     def stop(self):
         self.kb_listener.stop()
         self.mouse_listener.stop()
@@ -72,6 +82,8 @@ class InputController():
             print("\nsequence of length:", len(self.sequence))
             print(self.sequence)
 
+
+    # Recreate keyboard events that have been recorded as strings
     def deserialize_key(self, value: str):
         # Case 1: Special key like "Key.enter"
         
@@ -86,7 +98,7 @@ class InputController():
         return value.strip("'")
     
     
-    
+    # Play back recorded sequence of inputs
     def play(self):
         start = time.perf_counter()
         if Paths.debug: print("\nPlaying sequence of length", len(self.sequence))
@@ -124,5 +136,3 @@ class InputController():
             print(f"Execution time: {end - start:.6f} seconds")
         if self.parent.tb1.return_checkbox.isChecked():
             self.mouse_controller.position = return_position
-
-    

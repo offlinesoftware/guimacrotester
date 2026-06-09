@@ -1,5 +1,6 @@
 ''''
-LzTZopUnYTXPqdKIDKo6LA==
+Inital playing around with recording kb/mouse inputs
+(no longer used by the app)
 '''
 
 import pyautogui as pag

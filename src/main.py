@@ -16,14 +16,14 @@ class MainWindow(QMainWindow):
 
     # Constructor
     def __init__(self, parent=None):
-        # Constructor
 
         super().__init__(parent)
+        # Main Window config
         self.setWindowTitle("GUI Macro Tester")
         self.setFixedSize(970, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
 
-        #self.tree = ScreenTree()
+        # Set up central VBox widget
         container = QWidget()
         self.sequence_table = SequenceTable(self)
         self.ms_table = SequenceTable(self, True)
@@ -33,11 +33,9 @@ class MainWindow(QMainWindow):
         self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-090.png")))
         self.add_to_ms_button.setEnabled(False)
         
-        # self.ms_list = sequenceSequenceList(self)
         centralVBox = QVBoxLayout(container)
 
         centralVBox.addWidget(self.sequence_table)
-        # centralVBox.addWidget(self.tree)
         centralVBox.addWidget(self.add_to_ms_button)
         centralVBox.addWidget(self.ms_table)
         self.setCentralWidget(container)
@@ -52,11 +50,15 @@ class MainWindow(QMainWindow):
 
         self.input_controller = InputController(parent=self)
 
+
+    # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
         sequence_name, ok = QInputDialog.getText(self, 'Enter sequence name', 'Name of new sequence:')
         if ok and sequence_name:
             self.ms_table.import_current_seq(sequence_name)
 
+
+    # Set up status bar and menu bar
     def createMenus(self):
 
         # Bit at the bottom for tooltips
@@ -103,10 +105,14 @@ class MainWindow(QMainWindow):
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
 
+
+    # Executes class imported from about_dialogue.py
     def about(self):
         dlg = AboutDialog()
         dlg.exec()
 
+
+    # Load sequence file from disk
     def open_file(self):
         filename, _ = QFileDialog.getOpenFileName(
             self,
@@ -115,7 +121,6 @@ class MainWindow(QMainWindow):
             "TW Sequence (*.tws);;"
             "All files (*.*)",
         )
-
         if filename:
             with open(filename, "r") as f:
                 self.input_controller.sequence = json.load(f)
@@ -145,12 +150,8 @@ class MainWindow(QMainWindow):
                 with open(filename, "w") as f:
                     json.dump(mac, f)
 
-
-    def add_screen(self):
-        screen_name, ok = QInputDialog.getText(self, 'Enter screen name', 'Name of new screen:')
-        if ok and screen_name:
-            self.tree.new_screen(screen_name)
     
+    # Remove all entries in sequence table
     def clear_table(self):
         result = QMessageBox.question(
             self,
@@ -167,6 +168,7 @@ class MainWindow(QMainWindow):
                 print("Cancelled clearing the sequence")
             return
     
+    # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
         if is_available:
             self.tb1.play_sequence_action.setEnabled(True)
@@ -182,7 +184,22 @@ class MainWindow(QMainWindow):
             self.tb1.record_sequence_action.setText("Record sequence")
             self.add_to_ms_button(False)
 
+    # Show ok/cancel dialog when about to discard an unsaved sequence
+    def okay_to_clear_sequence(self):
+        result = QMessageBox.question(
+            None,
+            "Discard current sequence?",
+            "The current sequence has not been saved. Okay to proceed?",
+            QMessageBox.Ok | QMessageBox.Cancel
+        )
+        return True if result == QMessageBox.Ok else False
+
+    # Capture keyboard and mouse inputs and save to sequence table
     def record_sequence(self):
+        if self.tb1.record_sequence_action.text().endswith('*'):
+            if not self.okay_to_clear_sequence():
+                return
+            
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
             if len(self.input_controller.sequence) > 0:
@@ -215,8 +232,7 @@ if __name__ == "__main__":
             padding-left: 5px;
             padding-right: 2px;
         }
-
     """)
+    
     window.show()
-
     sys.exit(app.exec())
