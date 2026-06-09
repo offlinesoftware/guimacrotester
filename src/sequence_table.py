@@ -2,6 +2,8 @@ from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
 class SequenceTable(QTableWidget):
+
+    # Constructor
     def __init__(self, parent=None, is_macro_sequence=False):
         super().__init__(parent)
         self.parent = parent
@@ -28,6 +30,7 @@ class SequenceTable(QTableWidget):
         header.setSectionResizeMode(QHeaderView.Fixed)
 
 
+    # Populate upper sequence table with recorded sequence
     def populate_table(self):
         
         mac = self.parent.input_controller.sequence
@@ -41,6 +44,8 @@ class SequenceTable(QTableWidget):
                     if header.lower() == key:
                         self.setItem(row, col, QTableWidgetItem(str(val)))
     
+
+    # Read sequence from upper table and send back to input_controller
     def to_sequence(self):
         if Paths.debug: print("\nsequence extracted from table:")
         mac = []
@@ -56,6 +61,8 @@ class SequenceTable(QTableWidget):
         
         self.parent.input_controller.sequence = mac
     
+
+    # Move an input row up in the sequence table
     def move_up(self):
         if Paths.debug:
             print(self.selectedItems())
@@ -76,6 +83,8 @@ class SequenceTable(QTableWidget):
         # Move selection to the new row
         self.selectRow(row - 1)
     
+
+    # Move an input row down in the sequence table
     def move_down(self):
         if not self.selectedItems():
             return
@@ -97,12 +106,10 @@ class SequenceTable(QTableWidget):
         # Move selection to the new row
         self.selectRow(row + 1)
 
-    def import_current_seq(self, seq_name):
 
-        self.parent.sequence_table.to_sequence()
-        # self.sequence_list.append(mac)
-        # self.parent.ms_list.addItem(seq_name + ": " + str(mac))
-        
+    # Import the sequence from the upper table to one row of the macro-sequence
+    def import_current_seq(self, seq_name):
+        self.parent.sequence_table.to_sequence()       
         row = self.rowCount()
         self.insertRow(row)
         self.setItem(row, 0, QTableWidgetItem(seq_name))

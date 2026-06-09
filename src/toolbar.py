@@ -4,10 +4,15 @@ from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import QToolBar, QCheckBox, QDoubleSpinBox
 
 class Toolbar(QToolBar):
+
+    # Constructor
     def __init__(self, parent, tb_num):
         super(Toolbar, self).__init__(parent)
         self.setIconSize(QSize(16, 16))
+        
         match tb_num:
+        
+            # tb_num=1 sets up the top horizontal toolbar
             case 1:
                 # 'Record sequence' button
                 self.record_sequence_action = QAction(
@@ -40,15 +45,13 @@ class Toolbar(QToolBar):
                 self.delay_spin.setValue(100)
                 self.delay_spin.setEnabled(False)
 
-
                 self.delay_checkbox = QCheckBox("Delay (ms) :")
                 
-                self.delay_checkbox.stateChanged.connect(self.on_state_changed)
+                self.delay_checkbox.stateChanged.connect(self.delay_state_changed)
                 self.delay_checkbox.setChecked(True)
                 self.delay_checkbox.setEnabled(False)
                 self.addWidget(self.delay_checkbox)
                 
-
                 self.addWidget(self.delay_spin)
 
                 self.addSeparator()
@@ -56,7 +59,9 @@ class Toolbar(QToolBar):
                 self.return_checkbox.setChecked(True)
                 self.return_checkbox.setEnabled(False)
                 self.addWidget(self.return_checkbox)
-                
+            
+
+            # tb_num=2 sets up the left side vertical toolbar
             case 2:
                 # 'Clear table' button
                 self.clear_table_action = QAction(
@@ -93,8 +98,11 @@ class Toolbar(QToolBar):
                 if Paths.debug:
                     print("Attempt to construct undefined toolbar:", tb_num)
 
-    def on_state_changed(self, state):
+
+    # Called when the delay checkbox is clicked
+    def delay_state_changed(self, state):
         if state == Qt.CheckState.Checked.value:
             self.delay_spin.setEnabled(True)
         else:
             self.delay_spin.setEnabled(False)
+            
