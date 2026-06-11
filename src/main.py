@@ -1,11 +1,15 @@
 # This Python file uses the following encoding: utf-8
-import sys, json
+
+# Project imports
 from about_dialog import AboutDialog
-from sequence_table import SequenceTable
-from toolbar import Toolbar
 from input_controller import InputController
-# from clickThings import *
+from ms_table import MacroSeqTable
+from sequence_table import SequenceTable
 from paths import Paths
+from toolbar import Toolbar
+
+# External imports
+import sys, json
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton,
@@ -26,7 +30,7 @@ class MainWindow(QMainWindow):
         # Set up central VBox widget
         container = QWidget()
         self.sequence_table = SequenceTable(self)
-        self.ms_table = SequenceTable(self, True)
+        self.ms_table = MacroSeqTable(self)
         
         self.add_to_ms_button = QPushButton("Add to macro-sequence")
         self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
@@ -226,7 +230,6 @@ if __name__ == "__main__":
     app.setStyleSheet("""
         QWidget {
             font-size: 16px;
-
         }
         QCheckBox {
             padding-left: 5px;

@@ -12,7 +12,9 @@ python src/main.py
 ```
 
 ## To do
-- Replace macro_sequence list with two-column table
+- Implement keyboard shortcuts
+- Add icons to GUI elements
+- ~~Replace macro_sequence list with two-column table~~
 - Allow chaining of macros
   - ~~Swap sequence table to top half of display~~
   - Bottom half to take macros from file or current recording
@@ -30,5 +32,4 @@ python src/main.py
   - ~~Requires playback from table, not just dict~~
 
 - Allow master offset of all co-ordinates
-  - Either by clicked example or entering x/y values
-  - Maybe this replaces notion of screen area?
+  - Either by clicked example or entering x/y value

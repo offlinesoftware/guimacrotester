@@ -1,14 +1,13 @@
 from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
-class SequenceTable(QTableWidget):
+class MacroSeqTable(QTableWidget):
 
     # Constructor
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent = parent
-
-        self.headers = ["Type", "x", "y", "dx", "dy", "Button", "Pressed", "Key", "Char"]
+        self.headers = ["Name", "Sequence"]
         
         self.setColumnCount(len(self.headers))
         self.setHorizontalHeaderLabels(self.headers)
@@ -16,8 +15,7 @@ class SequenceTable(QTableWidget):
         self.setDragEnabled(False)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)   # or MultiSelection if you want Ctrl-click multi-row
-        self.setColumnWidth(3, 50)
-        self.setColumnWidth(4, 50)
+        self.setColumnWidth(1, 700)
 
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)
@@ -74,6 +72,7 @@ class SequenceTable(QTableWidget):
         # Move selection to the new row
         self.selectRow(row - 1)
 
+
     # Move an input row down in the sequence table
     def move_down(self):
         if not self.selectedItems():
@@ -94,12 +93,3 @@ class SequenceTable(QTableWidget):
 
         # Move selection to the new row
         self.selectRow(row + 1)
-
-
-    # Import the sequence from the upper table to one row of the macro-sequence
-    def import_current_seq(self, seq_name):
-        self.parent.sequence_table.to_sequence()       
-        row = self.rowCount()
-        self.insertRow(row)
-        self.setItem(row, 0, QTableWidgetItem(seq_name))
-        self.setItem(row, 1, QTableWidgetItem(str(self.parent.input_controller.sequence)))

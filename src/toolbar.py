@@ -1,7 +1,7 @@
 from paths import Paths
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtWidgets import QToolBar, QCheckBox, QDoubleSpinBox
+from PySide6.QtWidgets import QToolBar, QCheckBox, QDoubleSpinBox, QWidget, QSizePolicy
 
 class Toolbar(QToolBar):
 
@@ -63,6 +63,7 @@ class Toolbar(QToolBar):
 
             # tb_num=2 sets up the left side vertical toolbar
             case 2:
+
                 # 'Clear table' button
                 self.clear_table_action = QAction(
                     # QIcon(Paths.icon("ui-tab--plus.png")), 
@@ -94,6 +95,29 @@ class Toolbar(QToolBar):
                 self.move_down_action.triggered.connect(self.parent().sequence_table.move_down)
                 self.addAction(self.move_down_action)
 
+                # Spacing between top and bottom controls
+                spacer1 = QWidget()
+                spacer1.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+                self.addWidget(spacer1)
+
+                self.addSeparator()
+
+                spacer2 = QWidget()
+                spacer2.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
+                self.addWidget(spacer2)
+
+
+                self.ms_down_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Move down",
+                    self
+                )
+                self.ms_down_action.setStatusTip("Move one row of the macro-sequence table downwards")
+                self.ms_down_action.triggered.connect(self.parent().ms_table.move_down)
+                self.addAction(self.ms_down_action)
+
+                self.setFixedHeight(500)
+                
             case _:
                 if Paths.debug:
                     print("Attempt to construct undefined toolbar:", tb_num)
