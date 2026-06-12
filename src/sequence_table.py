@@ -6,7 +6,6 @@ class SequenceTable(QTableWidget):
     # Constructor
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.parent = parent
 
         self.headers = ["Type", "x", "y", "dx", "dy", "Button", "Pressed", "Key", "Char"]
         
@@ -26,7 +25,7 @@ class SequenceTable(QTableWidget):
     # Populate upper sequence table with recorded sequence
     def populate_table(self):
         
-        mac = self.parent.input_controller.sequence
+        mac = self.window().input_controller.sequence
         self.setRowCount(len(mac))
         
         self.clearContents()
@@ -52,7 +51,7 @@ class SequenceTable(QTableWidget):
             if Paths.debug: print(row_dict)
             mac.append(row_dict)
         
-        self.parent.input_controller.sequence = mac
+        self.window().input_controller.sequence = mac
     
 
     # Move an input row up in the sequence table
@@ -94,12 +93,3 @@ class SequenceTable(QTableWidget):
 
         # Move selection to the new row
         self.selectRow(row + 1)
-
-
-    # Import the sequence from the upper table to one row of the macro-sequence
-    def import_current_seq(self, seq_name):
-        self.parent.sequence_table.to_sequence()       
-        row = self.rowCount()
-        self.insertRow(row)
-        self.setItem(row, 0, QTableWidgetItem(seq_name))
-        self.setItem(row, 1, QTableWidgetItem(str(self.parent.input_controller.sequence)))

@@ -6,7 +6,6 @@ class MacroSeqTable(QTableWidget):
     # Constructor
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.parent = parent
         self.headers = ["Name", "Sequence"]
         
         self.setColumnCount(len(self.headers))
@@ -19,25 +18,12 @@ class MacroSeqTable(QTableWidget):
 
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)
-
-
-    # Populate upper sequence table with recorded sequence
-    def populate_table(self):
-        
-        mac = self.parent.input_controller.sequence
-        self.setRowCount(len(mac))
-        
-        self.clearContents()
-
-        for row, entry in enumerate(mac):
-            for key, val in entry.items():
-                for col, header in enumerate(self.headers):
-                    if header.lower() == key:
-                        self.setItem(row, col, QTableWidgetItem(str(val)))
-    
+ 
 
     # Read sequence from upper table and send back to input_controller
     def to_sequence(self):
+        pass 
+        ''' THIS WILL NEED TO BE DIFFERENT THAN THE sequence_table VERSION
         if Paths.debug: print("\nsequence extracted from table:")
         mac = []
         for r in range(self.rowCount()):
@@ -51,6 +37,7 @@ class MacroSeqTable(QTableWidget):
             mac.append(row_dict)
         
         self.parent.input_controller.sequence = mac
+        '''
     
 
     # Move an input row up in the sequence table
@@ -93,3 +80,12 @@ class MacroSeqTable(QTableWidget):
 
         # Move selection to the new row
         self.selectRow(row + 1)
+
+
+    # Import the sequence from the upper table to one row of the macro-sequence
+    def import_current_seq(self, seq_name):
+        self.window().sequence_table.to_sequence()       
+        row = self.rowCount()
+        self.insertRow(row)
+        self.setItem(row, 0, QTableWidgetItem(seq_name))
+        self.setItem(row, 1, QTableWidgetItem(str(self.window().input_controller.sequence)))

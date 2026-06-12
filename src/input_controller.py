@@ -1,12 +1,22 @@
 import time
 from paths import Paths
 from pynput import keyboard, mouse
+from PySide6.QtCore import QObject, Signal
 
-class InputController():
+
+class IcSignals(QObject):
+    populate_sequence = Signal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+
+class InputController:
 
     # Constructor
     def __init__(self, parent=None):
-        self.parent = parent
+
+        self.signals = IcSignals(parent)
 
         self.kb_listener = keyboard.Listener(
             on_press = self.on_press,
@@ -77,7 +87,7 @@ class InputController():
         # Remove click and release of 'Stop recording' button
         self.sequence = self.sequence[:-2]
         # What if we hold down 'Stop recording' the press keys before releasing it?
-        self.parent.sequence_table.populate_table()
+        self.signals.populate_sequence.emit()
         if Paths.debug:
             print("\nsequence of length:", len(self.sequence))
             print(self.sequence)
@@ -99,7 +109,7 @@ class InputController():
     
     
     # Play back recorded sequence of inputs
-    def play(self):
+    def play(self, use_delay: bool, delay_value: int, return_mouse: bool):
         start = time.perf_counter()
         if Paths.debug: print("\nPlaying sequence of length", len(self.sequence))
         return_position = self.mouse_controller.position
@@ -107,8 +117,8 @@ class InputController():
             print('Return position is {0}'.format(return_position))
         for inpt in self.sequence:
 
-            if self.parent.tb1.delay_checkbox.isChecked():
-                time.sleep(self.parent.tb1.delay_spin.value() / 1000)
+            if use_delay:
+                time.sleep(delay_value / 1000)
             match inpt["type"]:
                 case "keypress":
                     if Paths.debug: print("Pressing key: ", inpt['key'])
@@ -134,5 +144,5 @@ class InputController():
         if Paths.debug:
             end = time.perf_counter()
             print(f"Execution time: {end - start:.6f} seconds")
-        if self.parent.tb1.return_checkbox.isChecked():
+        if return_mouse:
             self.mouse_controller.position = return_position

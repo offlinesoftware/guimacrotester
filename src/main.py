@@ -52,8 +52,32 @@ class MainWindow(QMainWindow):
 
         self.createMenus()
 
-        self.input_controller = InputController(parent=self)
+        self.input_controller = InputController(self)
+        self.input_controller.signals.populate_sequence.connect(
+            self.sequence_table.populate_table
+        )
+        '''
+        
+# ✅ Parent passed → signals owned by MainWindow
+        self.worker = Worker(self)
 
+        # ✅ Connect signal
+        self.worker.signals.finished.connect(self.on_finished)
+
+        # UI setup
+        central = QWidget()
+        layout = QVBoxLayout(central)
+
+        button = QPushButton("Start Work")
+        button.clicked.connect(self.worker.do_work)
+
+        layout.addWidget(button)
+        self.setCentralWidget(central)
+
+    def on_finished(self, message):
+        print("MainWindow received:", message)
+
+        '''
 
     # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
@@ -203,13 +227,18 @@ class MainWindow(QMainWindow):
         if self.tb1.record_sequence_action.text().endswith('*'):
             if not self.okay_to_clear_sequence():
                 return
-            
+        
+        # Stop recording
         if self.input_controller.kb_listener.running:
             self.input_controller.stop()
             if len(self.input_controller.sequence) > 0:
                 self.set_sequence_available(True)
                 self.tb1.record_sequence_action.setText("Record sequence*")
+            else:
+                self.tb1.record_sequence_action.setText("Record sequence")
             self.tb1.record_sequence_action.setStatusTip("Record a sequence of inputs")
+        
+        # Start recording
         else:
             self.input_controller.start()
             self.tb1.record_sequence_action.setText("Stop Recording")
@@ -219,7 +248,11 @@ class MainWindow(QMainWindow):
     def play_sequence(self):
         self.sequence_table.to_sequence()
         self.tb1.record_sequence_action.setEnabled(False)
-        self.input_controller.play()
+        self.input_controller.play(
+            use_delay = self.tb1.delay_checkbox.isChecked, 
+            delay_value = self.tb1.delay_spin.value(), 
+            return_mouse = self.tb1.return_checkbox.isChecked()
+        )
         self.tb1.record_sequence_action.setEnabled(True)
     
 
