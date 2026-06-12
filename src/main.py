@@ -56,28 +56,6 @@ class MainWindow(QMainWindow):
         self.input_controller.signals.populate_sequence.connect(
             self.sequence_table.populate_table
         )
-        '''
-        
-# ✅ Parent passed → signals owned by MainWindow
-        self.worker = Worker(self)
-
-        # ✅ Connect signal
-        self.worker.signals.finished.connect(self.on_finished)
-
-        # UI setup
-        central = QWidget()
-        layout = QVBoxLayout(central)
-
-        button = QPushButton("Start Work")
-        button.clicked.connect(self.worker.do_work)
-
-        layout.addWidget(button)
-        self.setCentralWidget(central)
-
-    def on_finished(self, message):
-        print("MainWindow received:", message)
-
-        '''
 
     # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
@@ -240,6 +218,7 @@ class MainWindow(QMainWindow):
         
         # Start recording
         else:
+            self.sequence_table.clearContents()
             self.input_controller.start()
             self.tb1.record_sequence_action.setText("Stop Recording")
             self.tb1.record_sequence_action.setStatusTip("Finish recording the sequence of inputs")
