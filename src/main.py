@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         self.createMenus()
 
         self.input_controller = InputController(self)
-        self.input_controller.signals.populate_sequence.connect(
+        self.input_controller.populate_sequence.connect(
             self.sequence_table.populate_table
         )
 

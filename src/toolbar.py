@@ -7,7 +7,7 @@ class Toolbar(QToolBar):
 
     # Constructor
     def __init__(self, parent, tb_num):
-        super(Toolbar, self).__init__(parent)
+        super().__init__(parent)
         self.setIconSize(QSize(16, 16))
         
         match tb_num:
@@ -35,8 +35,10 @@ class Toolbar(QToolBar):
                 self.play_sequence_action.setEnabled(False)
                 self.addAction(self.play_sequence_action)
 
+                # Separate play button from delay checkbox
                 self.addSeparator()
 
+                # Spinbox for delay value
                 self.delay_spin = QDoubleSpinBox()
                 self.delay_spin.setRange(0, 1000)
                 self.delay_spin.setDecimals(0)
@@ -44,17 +46,22 @@ class Toolbar(QToolBar):
                 self.delay_spin.setFixedWidth(100)
                 self.delay_spin.setValue(100)
                 self.delay_spin.setEnabled(False)
-
-                self.delay_checkbox = QCheckBox("Delay (ms) :")
                 
+                # Checbox to toggle use of delay value
+                self.delay_checkbox = QCheckBox("Delay (ms) :")
                 self.delay_checkbox.stateChanged.connect(self.delay_state_changed)
                 self.delay_checkbox.setChecked(True)
                 self.delay_checkbox.setEnabled(False)
                 self.addWidget(self.delay_checkbox)
                 
+                # Draw spinbox after checkbox but need to delare it before 
+                # because of stateChanged.connect(self.delay_state_changed)
                 self.addWidget(self.delay_spin)
 
+                # Separate mouse return checkbox from delay spinbox
                 self.addSeparator()
+
+                # Checkbox for mouse return
                 self.return_checkbox = QCheckBox("Return mouse cursor after execution")
                 self.return_checkbox.setChecked(True)
                 self.return_checkbox.setEnabled(False)
@@ -106,7 +113,17 @@ class Toolbar(QToolBar):
                 spacer2.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
                 self.addWidget(spacer2)
 
+                # Macro-sequence Move Up button
+                self.ms_up_action = QAction(
+                    # QIcon(Paths.icon("ui-tab--plus.png")), 
+                    "Move up",
+                    self
+                )
+                self.ms_up_action.setStatusTip("Move one row of the macro-sequence table upwards")
+                self.ms_up_action.triggered.connect(self.parent().ms_table.move_up)
+                self.addAction(self.ms_up_action)
 
+                # Macro-sequence Move Down button
                 self.ms_down_action = QAction(
                     # QIcon(Paths.icon("ui-tab--plus.png")), 
                     "Move down",

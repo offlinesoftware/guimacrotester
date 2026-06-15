@@ -3,20 +3,16 @@ from paths import Paths
 from pynput import keyboard, mouse
 from PySide6.QtCore import QObject, Signal
 
+# Inherit from QObject to make use of Signal()
+class InputController(QObject):
 
-class IcSignals(QObject):
+    # Signals go before the constructor
     populate_sequence = Signal()
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-
-class InputController:
 
     # Constructor
     def __init__(self, parent=None):
-
-        self.signals = IcSignals(parent)
+        super().__init__(parent)    
+        
 
         self.kb_listener = keyboard.Listener(
             on_press = self.on_press,
@@ -87,7 +83,7 @@ class InputController:
         # Remove click and release of 'Stop recording' button
         self.sequence = self.sequence[:-2]
         # What if we hold down 'Stop recording' the press keys before releasing it?
-        self.signals.populate_sequence.emit()
+        self.populate_sequence.emit()
         if Paths.debug:
             print("\nsequence of length:", len(self.sequence))
             print(self.sequence)
