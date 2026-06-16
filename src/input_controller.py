@@ -111,6 +111,7 @@ class InputController(QObject):
         return_position = self.mouse_controller.position
         if Paths.debug:
             print('Return position is {0}'.format(return_position))
+            print("use_delay:", use_delay)
         for inpt in self.sequence:
 
             if use_delay:

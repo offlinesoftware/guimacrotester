@@ -6,7 +6,7 @@ from input_controller import InputController
 from ms_table import MacroSeqTable
 from sequence_table import SequenceTable
 from paths import Paths
-from toolbar import Toolbar
+from gmt_toolbars import Toolbar
 
 # External imports
 import sys, json
@@ -45,9 +45,9 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
         # Toolbars
-        self.tb1 = Toolbar(self, 1)
+        self.tb1 = Toolbar(self, "top_horizontal")
         self.addToolBar(self.tb1)
-        self.tb2 = Toolbar(self, 2)
+        self.tb2 = Toolbar(self, "left_vertical")
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.tb2) 
 
         self.createMenus()
@@ -176,19 +176,21 @@ class MainWindow(QMainWindow):
     
     # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
+        for widget in [
+                # Top toolbar
+                self.tb1.play_sequence_action, self.tb1.delay_checkbox, self.tb1.delay_spin, self.tb1.return_checkbox,
+
+                # Left toolbar
+                self.tb2.clear_table_action, self.tb2.move_up_action, self.tb2.move_down_action, 
+
+                # Central VBox
+                self.add_to_ms_button
+            ]: widget.setEnabled(is_available)
         if is_available:
-            self.tb1.play_sequence_action.setEnabled(True)
-            self.tb1.delay_checkbox.setEnabled(True)
-            self.tb1.return_checkbox.setEnabled(True)
-            self.tb2.clear_table_action.setEnabled(True)
-            self.add_to_ms_button.setEnabled(True)
+            self.tb1.delay_spin.setEnabled(self.tb1.delay_checkbox.isChecked())
         else:
-            self.tb1.play_sequence_action.setEnabled(False)
-            self.tb1.delay_checkbox.setEnabled(False)
-            self.tb1.return_checkbox.setEnabled(False)
-            self.tb2.clear_table_action.setEnabled(False)
             self.tb1.record_sequence_action.setText("Record sequence")
-            self.add_to_ms_button(False)
+        
 
     # Show ok/cancel dialog when about to discard an unsaved sequence
     def okay_to_clear_sequence(self):
@@ -228,7 +230,7 @@ class MainWindow(QMainWindow):
         self.sequence_table.to_sequence()
         self.tb1.record_sequence_action.setEnabled(False)
         self.input_controller.play(
-            use_delay = self.tb1.delay_checkbox.isChecked, 
+            use_delay = self.tb1.delay_checkbox.isChecked(), 
             delay_value = self.tb1.delay_spin.value(), 
             return_mouse = self.tb1.return_checkbox.isChecked()
         )
