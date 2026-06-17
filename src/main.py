@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         sequence_name, ok = QInputDialog.getText(self, 'Enter sequence name', 'Name of new sequence:')
         if ok and sequence_name:
             self.ms_table.import_current_seq(sequence_name)
+            self.set_ms_available(True)
 
 
     # Set up status bar and menu bar
@@ -102,11 +103,11 @@ class MainWindow(QMainWindow):
         # > > About 
         about_action = QAction(
             QIcon(Paths.icon("question.png")),
-            "About GUI sequence Tester",
+            "About GUI Macro Tester",
             self,
         )
         about_action.setStatusTip(
-            "Find out more about GUI sequence Tester"
+            "Find out more about GUI Macro Tester"
         )
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
@@ -177,20 +178,25 @@ class MainWindow(QMainWindow):
     # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
         for widget in [
-                # Top toolbar
-                self.tb1.play_sequence_action, self.tb1.delay_checkbox, self.tb1.delay_spin, self.tb1.return_checkbox,
+            # Top toolbar
+            self.tb1.play_sequence_action, self.tb1.delay_checkbox, self.tb1.delay_spin, self.tb1.return_checkbox,
 
-                # Left toolbar
-                self.tb2.clear_table_action, self.tb2.move_up_action, self.tb2.move_down_action, 
+            # Left toolbar
+            self.tb2.clear_table_action, self.tb2.move_up_action, self.tb2.move_down_action, 
 
-                # Central VBox
-                self.add_to_ms_button
-            ]: widget.setEnabled(is_available)
+            # Central VBox
+            self.add_to_ms_button
+        ]: widget.setEnabled(is_available)
         if is_available:
             self.tb1.delay_spin.setEnabled(self.tb1.delay_checkbox.isChecked())
         else:
             self.tb1.record_sequence_action.setText("Record sequence")
         
+    def set_ms_available(self, is_available):
+        for widget in [
+            # Left toolbar
+            self.tb2.ms_up_action, self.tb2.ms_down_action
+        ]: widget.setEnabled(is_available)
 
     # Show ok/cancel dialog when about to discard an unsaved sequence
     def okay_to_clear_sequence(self):

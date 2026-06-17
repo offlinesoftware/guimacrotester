@@ -95,13 +95,13 @@ class Toolbar(QToolBar):
         # Sequence editor 'Move up' button
         self.move_up_action = self.create_action(
             text="Move up", slot=self.parent().sequence_table.move_up,
-            enabled=False,   tip="Move one row of the input sequence table upwards"
+            enabled=False,  tip="Move one row of the input sequence table upwards"
         )
 
         # Move down button
         self.move_down_action = self.create_action(
-            text="Move down", slot=self.parent().sequence_table.move_down,
-            enabled=False,  tip="Move one row of the input sequence table downwards"
+            text="Move down",   slot=self.parent().sequence_table.move_down,
+            enabled=False,      tip="Move one row of the input sequence table downwards"
         )
 
         # Spacing between top and bottom controls
@@ -144,9 +144,7 @@ class Toolbar(QToolBar):
     def add_spacer(self):
         spcr = QWidget()
         if self.orientation() == Qt.Horizontal:
-            print("Adding vertical spacer")
             spcr.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         else:
-            print("Adding vertical spacer")
             spcr.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         self.addWidget(spcr)
