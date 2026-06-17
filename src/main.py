@@ -32,9 +32,9 @@ class MainWindow(QMainWindow):
         self.sequence_table = SequenceTable(self)
         self.ms_table = MacroSeqTable(self)
         
-        self.add_to_ms_button = QPushButton("Add to macro-sequence")
+        self.add_to_ms_button = QPushButton(" Add to macro-sequence")
         self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
-        self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-090.png")))
+        self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-270.png")))
         self.add_to_ms_button.setEnabled(False)
         
         centralVBox = QVBoxLayout(container)
@@ -45,10 +45,10 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
         # Toolbars
-        self.tb1 = Toolbar(self, "top_horizontal")
-        self.addToolBar(self.tb1)
-        self.tb2 = Toolbar(self, "left_vertical")
-        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.tb2) 
+        self.top_toolbar = Toolbar(self, "top_horizontal")
+        self.addToolBar(self.top_toolbar)
+        self.left_toolbar = Toolbar(self, "left_vertical")
+        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_toolbar) 
 
         self.createMenus()
 
@@ -132,9 +132,9 @@ class MainWindow(QMainWindow):
             with open(filename, "r") as f:
                 self.input_controller.sequence = json.load(f)
             self.sequence_table.populate_table()
-            self.tb1.play_sequence_action.setEnabled(True)
-            self.tb1.delay_checkbox.setEnabled(True)
-            self.tb1.delay_checkbox.setChecked(True)
+            self.top_toolbar.play_sequence_action.setEnabled(True)
+            self.top_toolbar.delay_checkbox.setEnabled(True)
+            self.top_toolbar.delay_checkbox.setChecked(True)
             
 
     # Store currently loaded sequence as JSON file
@@ -179,23 +179,23 @@ class MainWindow(QMainWindow):
     def set_sequence_available(self, is_available):
         for widget in [
             # Top toolbar
-            self.tb1.play_sequence_action, self.tb1.delay_checkbox, self.tb1.delay_spin, self.tb1.return_checkbox,
+            self.top_toolbar.play_sequence_action, self.top_toolbar.delay_checkbox, self.top_toolbar.delay_spin, self.top_toolbar.return_checkbox,
 
             # Left toolbar
-            self.tb2.clear_table_action, self.tb2.move_up_action, self.tb2.move_down_action, 
+            self.left_toolbar.clear_table_action, self.left_toolbar.move_up_action, self.left_toolbar.move_down_action, 
 
             # Central VBox
             self.add_to_ms_button
         ]: widget.setEnabled(is_available)
         if is_available:
-            self.tb1.delay_spin.setEnabled(self.tb1.delay_checkbox.isChecked())
+            self.top_toolbar.delay_spin.setEnabled(self.top_toolbar.delay_checkbox.isChecked())
         else:
-            self.tb1.record_sequence_action.setText("Record sequence")
+            self.top_toolbar.record_sequence_action.setText("Record sequence")
         
     def set_ms_available(self, is_available):
         for widget in [
             # Left toolbar
-            self.tb2.ms_up_action, self.tb2.ms_down_action
+            self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action
         ]: widget.setEnabled(is_available)
 
     # Show ok/cancel dialog when about to discard an unsaved sequence
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
 
     # Capture keyboard and mouse inputs and save to sequence table
     def record_sequence(self):
-        if self.tb1.record_sequence_action.text().endswith('*'):
+        if self.top_toolbar.record_sequence_action.text().endswith('*'):
             if not self.okay_to_clear_sequence():
                 return
         
@@ -219,28 +219,29 @@ class MainWindow(QMainWindow):
             self.input_controller.stop()
             if len(self.input_controller.sequence) > 0:
                 self.set_sequence_available(True)
-                self.tb1.record_sequence_action.setText("Record sequence*")
+                self.top_toolbar.record_sequence_action.setText("Record sequence*")
             else:
-                self.tb1.record_sequence_action.setText("Record sequence")
-            self.tb1.record_sequence_action.setStatusTip("Record a sequence of inputs")
+                self.top_toolbar.record_sequence_action.setText("Record sequence")
+            self.top_toolbar.record_sequence_action.setStatusTip("Record a sequence of inputs")
         
         # Start recording
         else:
             self.sequence_table.clearContents()
+            self.set_sequence_available(False)
             self.input_controller.start()
-            self.tb1.record_sequence_action.setText("Stop Recording")
-            self.tb1.record_sequence_action.setStatusTip("Finish recording the sequence of inputs")
+            self.top_toolbar.record_sequence_action.setText("Stop Recording")
+            self.top_toolbar.record_sequence_action.setStatusTip("Finish recording the sequence of inputs")
     
     # Replay the currently loaded sequence
     def play_sequence(self):
         self.sequence_table.to_sequence()
-        self.tb1.record_sequence_action.setEnabled(False)
+        self.top_toolbar.record_sequence_action.setEnabled(False)
         self.input_controller.play(
-            use_delay = self.tb1.delay_checkbox.isChecked(), 
-            delay_value = self.tb1.delay_spin.value(), 
-            return_mouse = self.tb1.return_checkbox.isChecked()
+            use_delay = self.top_toolbar.delay_checkbox.isChecked(), 
+            delay_value = self.top_toolbar.delay_spin.value(), 
+            return_mouse = self.top_toolbar.return_checkbox.isChecked()
         )
-        self.tb1.record_sequence_action.setEnabled(True)
+        self.top_toolbar.record_sequence_action.setEnabled(True)
     
 
 # Run the application

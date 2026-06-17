@@ -14,6 +14,7 @@ class Toolbar(QToolBar):
         super().__init__(parent)
         self.setIconSize(QSize(16, 16))
         self.setMovable(False)
+        self.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         
         if tb_instance == "top_horizontal":
             self.build_top_tb()
@@ -31,7 +32,8 @@ class Toolbar(QToolBar):
         # 'Record sequence' button
         self.record_sequence_action = self.create_action(
             text="Record sequence", slot=self.parent().record_sequence,
-            enabled=True,           tip="Record a sequence of inputs"
+            enabled=True,           tip="Record a sequence of inputs",
+            icon="control-record.png"
         )
 
         # Reduce misclicks
@@ -40,7 +42,8 @@ class Toolbar(QToolBar):
         # 'Play sequence' button
         self.play_sequence_action = self.create_action(
             text="Play sequence",   slot=self.parent().play_sequence,
-            enabled=False,          tip="Play back the recorded sequence of inputs"
+            enabled=False,          tip="Play back the recorded sequence of inputs",
+            icon="control.png"
         )
 
         # Separate play button from delay checkbox
@@ -124,7 +127,7 @@ class Toolbar(QToolBar):
 
     # Button action builder
     def create_action(self, text, slot, enabled, tip, icon=None):
-        act = self.addAction(QIcon(icon) if icon else QIcon(), text, slot)
+        act = self.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
         act.setStatusTip(tip)
         act.setEnabled(enabled)
         return act
