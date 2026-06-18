@@ -10,7 +10,7 @@ from gmt_toolbars import Toolbar
 
 # External imports
 import sys, json
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog, QMessageBox
@@ -23,7 +23,11 @@ class MainWindow(QMainWindow):
 
         super().__init__(parent)
         # Main Window config
-        self.setWindowTitle("GUI Macro Tester")
+        self.titles = {
+            "normal": "GUI Macro Tester", 
+            "recording": "GUI Macro Tester    RECORDING"
+        }
+        self.setWindowTitle(self.titles["normal"])
         self.setFixedSize(970, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
 
@@ -48,7 +52,12 @@ class MainWindow(QMainWindow):
         self.top_toolbar = Toolbar(self, "top_horizontal")
         self.addToolBar(self.top_toolbar)
         self.left_toolbar = Toolbar(self, "left_vertical")
-        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_toolbar) 
+        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_toolbar)
+
+        # Flashing button timer
+        self.flash_timer = QTimer()
+        self.flash_timer.timeout.connect(self.flash_title)
+
 
         self.createMenus()
 
@@ -56,6 +65,13 @@ class MainWindow(QMainWindow):
         self.input_controller.populate_sequence.connect(
             self.sequence_table.populate_table
         )
+
+    # Alternate the title of the window
+    def flash_title(self):
+        if self.windowTitle() == self.titles["normal"]:
+            self.setWindowTitle(self.titles["recording"])
+        else:
+            self.setWindowTitle(self.titles["normal"])
 
     # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
@@ -223,9 +239,12 @@ class MainWindow(QMainWindow):
             else:
                 self.top_toolbar.record_sequence_action.setText("Record sequence")
             self.top_toolbar.record_sequence_action.setStatusTip("Record a sequence of inputs")
+            self.flash_timer.stop()
+            self.setWindowTitle(self.titles["normal"])
         
         # Start recording
         else:
+            self.flash_timer.start(500)
             self.sequence_table.clearContents()
             self.set_sequence_available(False)
             self.input_controller.start()

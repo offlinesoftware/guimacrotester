@@ -1,6 +1,6 @@
 from paths import Paths
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtWidgets import (
     QToolBar, QCheckBox, QDoubleSpinBox, QWidget, QSizePolicy
 )
@@ -28,6 +28,8 @@ class Toolbar(QToolBar):
 
     # Top horizontal toolbar
     def build_top_tb(self):
+
+        self.flashTimer = QTimer()
         
         # 'Record sequence' button
         self.record_sequence_action = self.create_action(
