@@ -20,16 +20,18 @@ class MainWindow(QMainWindow):
 
     # Constructor
     def __init__(self, parent=None):
-
         super().__init__(parent)
-        # Main Window config
+        
+        # Main window config
         self.titles = {
-            "normal": "GUI Macro Tester", 
-            "recording": "GUI Macro Tester    RECORDING"
+            "normal":       "GUI Macro Tester", 
+            "recording":    "GUI Macro Tester    RECORDING"
         }
         self.setWindowTitle(self.titles["normal"])
         self.setFixedSize(970, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
+        self.flash_timer = QTimer()
+        self.flash_timer.timeout.connect(self.flash_title)
 
         # Set up central VBox widget
         container = QWidget()
@@ -53,18 +55,14 @@ class MainWindow(QMainWindow):
         self.addToolBar(self.top_toolbar)
         self.left_toolbar = Toolbar(self, "left_vertical")
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_toolbar)
-
-        # Flashing button timer
-        self.flash_timer = QTimer()
-        self.flash_timer.timeout.connect(self.flash_title)
-
-
         self.createMenus()
 
+        # Initialise Pynput
         self.input_controller = InputController(self)
         self.input_controller.populate_sequence.connect(
             self.sequence_table.populate_table
         )
+
 
     # Alternate the title of the window
     def flash_title(self):
@@ -72,6 +70,7 @@ class MainWindow(QMainWindow):
             self.setWindowTitle(self.titles["recording"])
         else:
             self.setWindowTitle(self.titles["normal"])
+
 
     # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
@@ -191,6 +190,7 @@ class MainWindow(QMainWindow):
                 print("Cancelled clearing the sequence")
             return
     
+
     # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
         for widget in [
@@ -207,12 +207,15 @@ class MainWindow(QMainWindow):
             self.top_toolbar.delay_spin.setEnabled(self.top_toolbar.delay_checkbox.isChecked())
         else:
             self.top_toolbar.record_sequence_action.setText("Record sequence")
-        
+
+
+    # Enable or disable GUI elements based on whether a macro-sequence is available
     def set_ms_available(self, is_available):
         for widget in [
             # Left toolbar
             self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action
         ]: widget.setEnabled(is_available)
+
 
     # Show ok/cancel dialog when about to discard an unsaved sequence
     def okay_to_clear_sequence(self):
@@ -223,6 +226,7 @@ class MainWindow(QMainWindow):
             QMessageBox.Ok | QMessageBox.Cancel
         )
         return True if result == QMessageBox.Ok else False
+
 
     # Capture keyboard and mouse inputs and save to sequence table
     def record_sequence(self):
@@ -251,6 +255,7 @@ class MainWindow(QMainWindow):
             self.top_toolbar.record_sequence_action.setText("Stop Recording")
             self.top_toolbar.record_sequence_action.setStatusTip("Finish recording the sequence of inputs")
     
+
     # Replay the currently loaded sequence
     def play_sequence(self):
         self.sequence_table.to_sequence()
@@ -261,6 +266,11 @@ class MainWindow(QMainWindow):
             return_mouse = self.top_toolbar.return_checkbox.isChecked()
         )
         self.top_toolbar.record_sequence_action.setEnabled(True)
+
+    
+    # Replace the entire macro-sequence
+    def play_ms(self):
+        pass
     
 
 # Run the application
@@ -271,10 +281,12 @@ if __name__ == "__main__":
         QWidget {
             font-size: 16px;
         }
+                      
         QCheckBox {
             padding-left: 5px;
             padding-right: 2px;
         }
+
     """)
     
     window.show()

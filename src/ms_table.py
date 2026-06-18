@@ -14,7 +14,8 @@ class MacroSeqTable(QTableWidget):
         self.setDragEnabled(False)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.setSelectionMode(QAbstractItemView.SingleSelection)   # or MultiSelection if you want Ctrl-click multi-row
-        self.setColumnWidth(1, 700)
+        self.setColumnWidth(0, 400)
+        self.setColumnWidth(1, 400)
 
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)

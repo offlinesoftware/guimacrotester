@@ -13,7 +13,7 @@ class InputController(QObject):
     def __init__(self, parent=None):
         super().__init__(parent)    
         
-
+        # Pynput listeners
         self.kb_listener = keyboard.Listener(
             on_press = self.on_press,
             on_release = self.on_release)
@@ -33,15 +33,18 @@ class InputController(QObject):
         # print('Pointer moved to {0}'.format((x, y)))
         pass
 
+
     # Button class is not serializable so save as string
     def on_click(self, x, y, button, pressed):
         m_click = {"type": "click", "x": x, "y": y, "button": str(button), "pressed": pressed}
         self.sequence.append(m_click)
 
+
     # Capture mousewheel scroll events
     def on_scroll(self, x, y, dx, dy):
         m_scroll = {"type": "scroll", "x": x, "y": y, "dx": dx, "dy": dy}
         self.sequence.append(m_scroll)
+
 
     # Press of keyboard buttons (not mouse clicks)
     def on_press(self, key):
@@ -49,6 +52,7 @@ class InputController(QObject):
         if hasattr(key, 'char'):
             keypress["char"] = key.char
         self.sequence.append(keypress)
+
 
     # Release of keyboard buttons (not mouse clicks)
     def on_release(self, key):

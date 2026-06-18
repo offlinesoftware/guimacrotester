@@ -1,6 +1,6 @@
 from paths import Paths
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import QSize, Qt, QTimer
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
     QToolBar, QCheckBox, QDoubleSpinBox, QWidget, QSizePolicy
 )
@@ -28,8 +28,6 @@ class Toolbar(QToolBar):
 
     # Top horizontal toolbar
     def build_top_tb(self):
-
-        self.flashTimer = QTimer()
         
         # 'Record sequence' button
         self.record_sequence_action = self.create_action(
@@ -89,7 +87,7 @@ class Toolbar(QToolBar):
 
         self.setOrientation(Qt.Vertical)
         self.add_spacer()
-        self.setFixedHeight(500)
+        self.setFixedHeight(600)
 
         # Sequence editor 'Clear table' button
         self.clear_table_action = self.create_action(
@@ -124,6 +122,21 @@ class Toolbar(QToolBar):
         self.ms_down_action = self.create_action(
             text="Move down",   slot=self.parent().ms_table.move_down,
             enabled=False,      tip="Move one row of the macro-sequence table downwards"
+        )
+
+        self.add_spacer()
+
+        # Play macro-sequence button
+        self.play_ms_action = self.create_action(
+            text="PLAY\nMACRO\nSEQUENCE",   slot=self.parent().play_ms,
+            enabled=False,      tip="Play back all inputs in the macro-sequence"
+        )
+        big_button = self.widgetForAction(self.play_ms_action)
+        big_button.setStyleSheet('''
+            border: 1px solid gray;
+            padding: 2px;
+            font: bold;
+        '''
         )
 
 
