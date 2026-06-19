@@ -51,7 +51,7 @@ class Toolbar(QToolBar):
 
         # Spinbox for delay value
         self.delay_spin = QDoubleSpinBox(
-            value=100,      minimum=0,  maximum=100, 
+            value=100,      minimum=0,  maximum=1000, 
             singleStep=50,  decimals=0
         )
         self.delay_spin.setEnabled(False)

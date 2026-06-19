@@ -23,7 +23,7 @@ class MacroSeqTable(QTableWidget):
 
     # Read sequence from upper table and send back to input_controller
     def to_sequence(self):
-        pass 
+        
         ''' THIS WILL NEED TO BE DIFFERENT THAN THE sequence_table VERSION
         if Paths.debug: print("\nsequence extracted from table:")
         mac = []

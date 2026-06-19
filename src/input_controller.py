@@ -111,7 +111,9 @@ class InputController(QObject):
     # Play back recorded sequence of inputs
     def play(self, use_delay: bool, delay_value: int, return_mouse: bool):
         start = time.perf_counter()
-        if Paths.debug: print("\nPlaying sequence of length", len(self.sequence))
+        if Paths.debug:
+            print("\nPlaying sequence of length", len(self.sequence))
+            print("Data type is", type(self.sequence))
         return_position = self.mouse_controller.position
         if Paths.debug:
             print('Return position is {0}'.format(return_position))

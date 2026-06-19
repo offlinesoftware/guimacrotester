@@ -7,9 +7,9 @@ from ms_table import MacroSeqTable
 from sequence_table import SequenceTable
 from paths import Paths
 from gmt_toolbars import Toolbar
-
+from utils import Utils
 # External imports
-import sys, json
+import sys, json, ast
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton,
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         )
 
 
-    # Alternate the title of the window
+    # Alternate the title of the windowfr
     def flash_title(self):
         if self.windowTitle() == self.titles["normal"]:
             self.setWindowTitle(self.titles["recording"])
@@ -112,6 +112,15 @@ class MainWindow(QMainWindow):
         save_file_action.triggered.connect(self.save_file)
         file_menu.addAction(save_file_action)
 
+        # Macro-sequence bits
+        file_menu.addSeparator
+        
+        # > > Save macro-sequence
+        save_ms_action = self.menu_action(
+            menu=file_menu,         text="Save macro-sequence", 
+            slot=self.save_macro,   tip="Save current macro-sequence to file"
+        )
+
         # > Help menu
         help_menu = self.menuBar().addMenu("&Help")
 
@@ -127,6 +136,25 @@ class MainWindow(QMainWindow):
         about_action.triggered.connect(self.about)
         help_menu.addAction(about_action)
 
+    
+    def menu_action(self, menu, text, slot, tip, icon=None):
+        ma = menu.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
+        ma.setStatusTip(tip)
+
+    def menu_action1(self, menu, text, slot, tip, icon=None):
+        ma = QAction(
+            QIcon(Paths.icon(icon)) if icon else QIcon(), text, self
+        )
+        ma.setStatusTip(tip)
+        #ma.triggered.connect(slot)
+        menu.addAction(ma)
+
+            # Button action builder
+    def create_action(self, text, slot, enabled, tip, icon=None):
+        act = self.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
+        act.setStatusTip(tip)
+        act.setEnabled(enabled)
+        return act
 
     # Executes class imported from about_dialogue.py
     def about(self):
@@ -147,14 +175,13 @@ class MainWindow(QMainWindow):
             with open(filename, "r") as f:
                 self.input_controller.sequence = json.load(f)
             self.sequence_table.populate_table()
-            self.top_toolbar.play_sequence_action.setEnabled(True)
-            self.top_toolbar.delay_checkbox.setEnabled(True)
-            self.top_toolbar.delay_checkbox.setChecked(True)
+            self.set_sequence_available(True)
             
 
     # Store currently loaded sequence as JSON file
     def save_file(self):
-        if Paths.debug: print("\nEntering save_file")
+        if Paths.debug:
+            print("\nEntering save_file")
         mac = self.input_controller.sequence
         if len(mac) == 0:
             if Paths.debug: print("No sequence to save")
@@ -171,6 +198,35 @@ class MainWindow(QMainWindow):
             if filename:
                 with open(filename, "w") as f:
                     json.dump(mac, f)
+    
+    
+    # Store macro-sequence as JSON file
+    def save_macro(self):
+        if Paths.debug:
+            print("\nEntering save_macro")
+        
+        macList = []
+        for r in range(self.ms_table.rowCount()):
+            name = self.ms_table.item(r, 0).text()
+            seq = ast.literal_eval(self.ms_table.item(r, 1).text())
+            macList.append([name, seq])
+        
+        if len(macList) == 0:
+            if Paths.debug: print("No macro-sequence to save")
+            return
+        
+        else:
+            filename, _ = QFileDialog.getSaveFileName(
+                self,
+                "Save Macro-Sequence As",
+                "",
+                "TW Macro-Sequence (*.twm);;"
+                "All files (*.*)",
+            )
+
+            if filename:
+                with open(filename, "w") as f:
+                    json.dump(macList, f)
 
     
     # Remove all entries in sequence table
@@ -213,7 +269,7 @@ class MainWindow(QMainWindow):
     def set_ms_available(self, is_available):
         for widget in [
             # Left toolbar
-            self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action
+            self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action, self.left_toolbar.play_ms_action
         ]: widget.setEnabled(is_available)
 
 
@@ -270,7 +326,18 @@ class MainWindow(QMainWindow):
     
     # Replace the entire macro-sequence
     def play_ms(self):
-        pass
+        self.top_toolbar.record_sequence_action.setEnabled(False)
+        
+        for r in range(self.ms_table.rowCount()):
+            mac = ast.literal_eval(self.ms_table.item(r, 1).text())
+            self.window().input_controller.sequence = mac    
+            self.input_controller.play(
+                use_delay = self.top_toolbar.delay_checkbox.isChecked(), 
+                delay_value = self.top_toolbar.delay_spin.value(), 
+                return_mouse = self.top_toolbar.return_checkbox.isChecked()
+            )
+        
+        self.top_toolbar.record_sequence_action.setEnabled(True)
     
 
 # Run the application
