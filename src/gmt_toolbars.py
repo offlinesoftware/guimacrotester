@@ -112,6 +112,12 @@ class Toolbar(QToolBar):
         self.addSeparator()
         self.add_spacer()
         
+        # Sequence editor 'Clear table' button
+        self.delete_ms_row_action = self.create_action(
+            text="Delete row",  slot=self.parent().delete_ms_row,
+            enabled=False,          tip="Delete the selected row of the macro-sequence row"
+        )
+
         # Macro-sequence 'Move up' button
         self.ms_up_action = self.create_action(
             text = "Move up",   slot=self.parent().ms_table.move_up,

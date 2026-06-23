@@ -19,26 +19,6 @@ class MacroSeqTable(QTableWidget):
 
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)
- 
-
-    # Read sequence from upper table and send back to input_controller
-    def to_sequence(self):
-        
-        ''' THIS WILL NEED TO BE DIFFERENT THAN THE sequence_table VERSION
-        if Paths.debug: print("\nsequence extracted from table:")
-        mac = []
-        for r in range(self.rowCount()):
-            row_dict = {}
-            for c, header in enumerate(h.lower() for h in self.headers):
-                item = self.item(r, c)
-                row_dict[header] = item.text() if item else ""
-            if row_dict['pressed'] == 'True': row_dict['pressed'] = True
-            if row_dict['pressed'] == 'False': row_dict['pressed'] = False
-            if Paths.debug: print(row_dict)
-            mac.append(row_dict)
-        
-        self.parent.input_controller.sequence = mac
-        '''
     
 
     # Move an input row up in the sequence table

@@ -93,74 +93,59 @@ class MainWindow(QMainWindow):
         file_menu = self.menuBar().addMenu("&File")
 
         # > > Open file
-        open_file_action = QAction(
-            QIcon(Paths.icon("disk--arrow.png")),
-            "Open file...",
-            self,
+        open_file_action = self.menu_action(
+            menu=file_menu,         text="Open sequence...", 
+            slot=self.open_file,    tip="Load an input sequence from a TWS file",
+            enabled=True,           icon="disk--arrow.png"
         )
-        open_file_action.setStatusTip("Open from file")
-        open_file_action.triggered.connect(self.open_file)
-        file_menu.addAction(open_file_action)
 
-        # > > Save file
-        save_file_action = QAction(
-            QIcon(Paths.icon("disk--pencil.png")),
-            "Save sequence as...",
-            self,
+        # > > Save macro-sequence
+        save_file_action = self.menu_action(
+            menu=file_menu,         text="Save sequence as...", 
+            slot=self.save_file,    tip="Save current sequence to file",
+            enabled=False,          icon="disk--pencil.png"
         )
-        save_file_action.setStatusTip("Save current sequence to file")
-        save_file_action.triggered.connect(self.save_file)
-        file_menu.addAction(save_file_action)
 
-        # Macro-sequence bits
-        file_menu.addSeparator
-        
+        # > > Macro-sequence bits
+        file_menu.addSeparator()
+
+        # > > Open macro-sequence
+        open_file_action = self.menu_action(
+            menu=file_menu,         text="Open macro-sequence...", 
+            slot=self.open_macro,   tip="Load a macro-sequence from a TWM file",
+            enabled=True,           icon="cd--arrow.png"
+        )
+
         # > > Save macro-sequence
         save_ms_action = self.menu_action(
-            menu=file_menu,         text="Save macro-sequence", 
-            slot=self.save_macro,   tip="Save current macro-sequence to file"
+            menu=file_menu,         text="Save macro-sequence as...", 
+            slot=self.save_macro,   tip="Save current macro-sequence to file",
+            enabled=False,          icon="cd--pencil.png"
         )
 
         # > Help menu
         help_menu = self.menuBar().addMenu("&Help")
 
         # > > About 
-        about_action = QAction(
-            QIcon(Paths.icon("question.png")),
-            "About GUI Macro Tester",
-            self,
+        about_action = self.menu_action(
+            menu=help_menu,     text="About GUI Macro Tester", 
+            slot=self.about,    tip="Find out more about GUI Macro Tester",
+            enabled=True,       icon="question.png"
         )
-        about_action.setStatusTip(
-            "Find out more about GUI Macro Tester"
-        )
-        about_action.triggered.connect(self.about)
-        help_menu.addAction(about_action)
 
-    
-    def menu_action(self, menu, text, slot, tip, icon=None):
+
+    # Menu button action builder
+    def menu_action(self, menu, text, slot, tip, enabled, icon=None):
         ma = menu.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
         ma.setStatusTip(tip)
+        ma.setEnabled(enabled)
 
-    def menu_action1(self, menu, text, slot, tip, icon=None):
-        ma = QAction(
-            QIcon(Paths.icon(icon)) if icon else QIcon(), text, self
-        )
-        ma.setStatusTip(tip)
-        #ma.triggered.connect(slot)
-        menu.addAction(ma)
-
-            # Button action builder
-    def create_action(self, text, slot, enabled, tip, icon=None):
-        act = self.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
-        act.setStatusTip(tip)
-        act.setEnabled(enabled)
-        return act
 
     # Executes class imported from about_dialogue.py
     def about(self):
         dlg = AboutDialog()
         dlg.exec()
-
+    
 
     # Load sequence file from disk
     def open_file(self):
@@ -176,6 +161,9 @@ class MainWindow(QMainWindow):
                 self.input_controller.sequence = json.load(f)
             self.sequence_table.populate_table()
             self.set_sequence_available(True)
+
+    def open_macro(self):
+        pass
             
 
     # Store currently loaded sequence as JSON file
@@ -247,11 +235,17 @@ class MainWindow(QMainWindow):
             return
     
 
+    # Remove the currently selected row of the macro-sequence table
+    def delete_ms_row(self):
+        self.ms_table.removeRow(self.ms_table.currentRow())
+    
+
     # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
         for widget in [
             # Top toolbar
-            self.top_toolbar.play_sequence_action, self.top_toolbar.delay_checkbox, self.top_toolbar.delay_spin, self.top_toolbar.return_checkbox,
+            self.top_toolbar.play_sequence_action, self.top_toolbar.delay_checkbox, 
+            self.top_toolbar.delay_spin, self.top_toolbar.return_checkbox,
 
             # Left toolbar
             self.left_toolbar.clear_table_action, self.left_toolbar.move_up_action, self.left_toolbar.move_down_action, 
@@ -269,7 +263,8 @@ class MainWindow(QMainWindow):
     def set_ms_available(self, is_available):
         for widget in [
             # Left toolbar
-            self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action, self.left_toolbar.play_ms_action
+            self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action, 
+            self.left_toolbar.play_ms_action, self.left_toolbar.delete_ms_row_action
         ]: widget.setEnabled(is_available)
 
 
