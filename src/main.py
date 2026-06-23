@@ -7,11 +7,11 @@ from ms_table import MacroSeqTable
 from sequence_table import SequenceTable
 from paths import Paths
 from gmt_toolbars import Toolbar
-from utils import Utils
+
 # External imports
 import sys, json, ast
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QAction, QIcon, QKeySequence
+from PySide6.QtGui import QIcon, QKeySequence
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton,
     QMainWindow, QStatusBar, QInputDialog, QFileDialog, QMessageBox
 )
@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
             "recording":    "GUI Macro Tester    RECORDING"
         }
         self.setWindowTitle(self.titles["normal"])
-        self.setFixedSize(970, 700)
+        self.setFixedSize(1000, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
         self.flash_timer = QTimer()
         self.flash_timer.timeout.connect(self.flash_title)
@@ -90,17 +90,17 @@ class MainWindow(QMainWindow):
         menu = self.menuBar()
 
         # > File menu        
-        file_menu = self.menuBar().addMenu("&File")
+        file_menu = menu.addMenu("&File")
 
         # > > Open file
-        open_file_action = self.menu_action(
+        self.open_file_action = self.menu_action(
             menu=file_menu,         text="Open sequence...", 
             slot=self.open_file,    tip="Load an input sequence from a TWS file",
             enabled=True,           icon="disk--arrow.png"
         )
 
         # > > Save macro-sequence
-        save_file_action = self.menu_action(
+        self.save_file_action = self.menu_action(
             menu=file_menu,         text="Save sequence as...", 
             slot=self.save_file,    tip="Save current sequence to file",
             enabled=False,          icon="disk--pencil.png"
@@ -110,14 +110,14 @@ class MainWindow(QMainWindow):
         file_menu.addSeparator()
 
         # > > Open macro-sequence
-        open_file_action = self.menu_action(
+        self.open_file_action = self.menu_action(
             menu=file_menu,         text="Open macro-sequence...", 
             slot=self.open_macro,   tip="Load a macro-sequence from a TWM file",
             enabled=True,           icon="cd--arrow.png"
         )
 
         # > > Save macro-sequence
-        save_ms_action = self.menu_action(
+        self.save_ms_action = self.menu_action(
             menu=file_menu,         text="Save macro-sequence as...", 
             slot=self.save_macro,   tip="Save current macro-sequence to file",
             enabled=False,          icon="cd--pencil.png"
@@ -127,7 +127,7 @@ class MainWindow(QMainWindow):
         help_menu = self.menuBar().addMenu("&Help")
 
         # > > About 
-        about_action = self.menu_action(
+        self.about_action = self.menu_action(
             menu=help_menu,     text="About GUI Macro Tester", 
             slot=self.about,    tip="Find out more about GUI Macro Tester",
             enabled=True,       icon="question.png"
@@ -139,7 +139,7 @@ class MainWindow(QMainWindow):
         ma = menu.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
         ma.setStatusTip(tip)
         ma.setEnabled(enabled)
-
+        return ma
 
     # Executes class imported from about_dialogue.py
     def about(self):
@@ -243,6 +243,9 @@ class MainWindow(QMainWindow):
     # Enable or disable GUI elements based on whether a sequence is available
     def set_sequence_available(self, is_available):
         for widget in [
+            # Menu bar
+            self.save_file_action,
+
             # Top toolbar
             self.top_toolbar.play_sequence_action, self.top_toolbar.delay_checkbox, 
             self.top_toolbar.delay_spin, self.top_toolbar.return_checkbox,
@@ -262,6 +265,9 @@ class MainWindow(QMainWindow):
     # Enable or disable GUI elements based on whether a macro-sequence is available
     def set_ms_available(self, is_available):
         for widget in [
+            # Menu bar
+            self.save_ms_action,
+
             # Left toolbar
             self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action, 
             self.left_toolbar.play_ms_action, self.left_toolbar.delete_ms_row_action
@@ -347,6 +353,10 @@ if __name__ == "__main__":
         QCheckBox {
             padding-left: 5px;
             padding-right: 2px;
+        }
+        
+        QToolButton {
+            min-width: 150px;
         }
 
     """)

@@ -86,25 +86,34 @@ class Toolbar(QToolBar):
     def build_left_tb(self):
 
         self.setOrientation(Qt.Vertical)
+        self.setLayoutDirection(Qt.RightToLeft)
+        self.setStyleSheet("""
+            QToolButton {
+                min-width: 150px;
+            }
+        """)
         self.add_spacer()
         self.setFixedHeight(600)
 
         # Sequence editor 'Clear table' button
         self.clear_table_action = self.create_action(
             text="Clear sequence",  slot=self.parent().clear_table,
-            enabled=False,          tip="Clear the current sequence shown in the top table"
+            enabled=False,          tip="Clear the current sequence shown in the top table",
+            icon="new.png"
         )
 
         # Sequence editor 'Move up' button
         self.move_up_action = self.create_action(
             text="Move up", slot=self.parent().sequence_table.move_up,
-            enabled=False,  tip="Move one row of the input sequence table upwards"
+            enabled=False,  tip="Move one row of the input sequence table upwards",
+            icon="arrow-090.png"
         )
 
         # Move down button
         self.move_down_action = self.create_action(
             text="Move down",   slot=self.parent().sequence_table.move_down,
-            enabled=False,      tip="Move one row of the input sequence table downwards"
+            enabled=False,      tip="Move one row of the input sequence table downwards",
+            icon="arrow-270.png"
         )
 
         # Spacing between top and bottom controls
@@ -112,22 +121,25 @@ class Toolbar(QToolBar):
         self.addSeparator()
         self.add_spacer()
         
-        # Sequence editor 'Clear table' button
+        # Macro sequence 'Delete row' button
         self.delete_ms_row_action = self.create_action(
             text="Delete row",  slot=self.parent().delete_ms_row,
-            enabled=False,          tip="Delete the selected row of the macro-sequence row"
+            enabled=False,          tip="Delete the selected row of the macro-sequence row",
+            icon="table-delete-row.png"
         )
 
         # Macro-sequence 'Move up' button
         self.ms_up_action = self.create_action(
             text = "Move up",   slot=self.parent().ms_table.move_up,
-            enabled=False,      tip="Move one row of the macro-sequence table upwards"
+            enabled=False,      tip="Move one row of the macro-sequence table upwards",
+            icon="arrow-090.png"
         )
 
         # Macro-sequence Move Down button
         self.ms_down_action = self.create_action(
             text="Move down",   slot=self.parent().ms_table.move_down,
-            enabled=False,      tip="Move one row of the macro-sequence table downwards"
+            enabled=False,      tip="Move one row of the macro-sequence table downwards",
+            icon="arrow-270.png"
         )
 
         self.add_spacer()
