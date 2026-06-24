@@ -87,11 +87,6 @@ class Toolbar(QToolBar):
 
         self.setOrientation(Qt.Vertical)
         self.setLayoutDirection(Qt.RightToLeft)
-        self.setStyleSheet("""
-            QToolButton {
-                min-width: 150px;
-            }
-        """)
         self.add_spacer()
         self.setFixedHeight(600)
 

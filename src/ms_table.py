@@ -1,3 +1,4 @@
+import pprint
 from paths import Paths
 from PySide6.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 
@@ -20,6 +21,22 @@ class MacroSeqTable(QTableWidget):
         header = self.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.Fixed)
     
+    
+    # Populate macro-sequence table with from twm file
+    def populate_table(self, ms):
+        '''
+        for n, row in enumerate(ms):
+            print("\nRow:", n)
+            print("Name:", row[0])
+            print("Sequence:", row[1])
+        '''
+        for row in ms:
+            row_number = self.rowCount()
+            self.insertRow(row_number)
+            self.setItem(row_number, 0, QTableWidgetItem(row[0]))
+            self.setItem(row_number, 1, QTableWidgetItem(str(row[1])))
+        self.window().set_ms_available(True)
+            
 
     # Move an input row up in the sequence table
     def move_up(self):
@@ -64,7 +81,7 @@ class MacroSeqTable(QTableWidget):
 
 
     # Import the sequence from the upper table to one row of the macro-sequence
-    def import_current_seq(self, seq_name):
+    def import_current_seq(self, seq_name, from_file=None):
         self.window().sequence_table.to_sequence()       
         row = self.rowCount()
         self.insertRow(row)

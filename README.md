@@ -1,20 +1,16 @@
 # guimacrotester
 GUI Macro Tester
 
-## Running on Debian- or Ubuntu-based Linux
-```
-sudo apt install libxcb-cursor0
-cd guimacrotester
-python -m venv venv
-source venv/bin/activate
-pip install pyside6 pynput
-python src/main.py
-```
+## TODO: Feature freeze for V1.0
+- Implement testing
+  - Create one test_whatever.py per src file
+- Write documentation
+- Create executable for Windows
 
-## To do
-- Allowing loading macro-sequence from file
+## Backlog
+- ~~Allowing loading macro-sequence from file~~
 - Implement keyboard shortcuts
-- Add icons to GUI elements
+- ~~Add icons to GUI elements~~
 - ~~Replace macro_sequence list with two-column table~~
 - Allow chaining of macros
   - ~~Swap sequence table to top half of display~~

@@ -162,8 +162,19 @@ class MainWindow(QMainWindow):
             self.sequence_table.populate_table()
             self.set_sequence_available(True)
 
+
+    # Load macro-sequence file from disk
     def open_macro(self):
-        pass
+        filename, _ = QFileDialog.getOpenFileName(
+            self,
+            "Open file",
+            "",
+            "TW Sequence (*.twm);;"
+            "All files (*.*)",
+        )
+        if filename:
+            with open(filename, "r") as f:
+                self.ms_table.populate_table(json.load(f))
             
 
     # Store currently loaded sequence as JSON file
@@ -267,6 +278,9 @@ class MainWindow(QMainWindow):
         for widget in [
             # Menu bar
             self.save_ms_action,
+
+            # Top toolbar
+            self.top_toolbar.delay_checkbox, self.top_toolbar.delay_spin, self.top_toolbar.return_checkbox,
 
             # Left toolbar
             self.left_toolbar.ms_up_action, self.left_toolbar.ms_down_action, 
