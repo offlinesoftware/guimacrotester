@@ -2,8 +2,6 @@
 GUI Macro Tester
 
 ## TODO: Feature freeze for V1.0
-- Implement testing
-  - Create one test_whatever.py per src file
 - Write documentation
 - Create executable for Windows
 

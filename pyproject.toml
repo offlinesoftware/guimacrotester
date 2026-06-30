@@ -2,8 +2,6 @@
 name = "GUI Macro Tester"
 dependencies = [
     "PySide6",
-    "pytest",
-    "pytest-qt",
     "pynput"
 ]
 description = "GUI macro tester"
@@ -15,13 +13,3 @@ authors = [
 
 [tool.pyside6-project]
 files = ["mainwindow.py", "clickThings.py"]
-
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = "src"
-qt_api = "pyside6"
-addopts = [
-    "-ra",        # show extra summary info
-    "--strict-markers",
-]

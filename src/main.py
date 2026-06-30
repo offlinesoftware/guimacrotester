@@ -1,5 +1,14 @@
 # This Python file uses the following encoding: utf-8
 
+''' GUI MACRO TESTER MAIN CLASS
+Compile with:
+pyinstaller -F -w --clean --paths=src src/main.py
+
+Resources file built from .qrc using:
+pyside6-rcc resources.qrc -o src/resources.py
+'''
+import resources
+
 # Project imports
 from about_dialog import AboutDialog
 from input_controller import InputController
@@ -197,6 +206,7 @@ class MainWindow(QMainWindow):
             if filename:
                 with open(filename, "w") as f:
                     json.dump(mac, f)
+                    self.top_toolbar.record_sequence_action.setText("Record sequence")
     
     
     # Store macro-sequence as JSON file
@@ -237,7 +247,7 @@ class MainWindow(QMainWindow):
             QMessageBox.Ok | QMessageBox.Cancel
         )
         if result == QMessageBox.Ok:
-            print("Clearing the current sequence")
+            if Paths.debug: print("Clearing the current sequence")
             self.sequence_table.clearContents()
             self.set_sequence_available(False)
         elif result == QMessageBox.Cancel:

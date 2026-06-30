@@ -1,3 +1,4 @@
+'''
 from pathlib import Path
 
 class Paths:
@@ -9,3 +10,11 @@ class Paths:
     @classmethod
     def icon(cls, filename):
         return (cls.icons / filename).as_posix()
+'''
+
+class Paths:
+    debug = False
+
+    @classmethod
+    def icon(cls, filename):
+        return f":/icons/{filename}"

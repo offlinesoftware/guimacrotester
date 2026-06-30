@@ -6,17 +6,10 @@ icon: lucide/rocket
 
 GUI Macro Tester is a visual interface testing tool that allows you to edit, reorder and chain sequences of UI inputs – also known as macros. It currently exists only as source code, though binary executables will be made available when the project reaches version 1.0.
 
-The GitHub repository is [here](https://zensical.org/docs/).
+The GitHub repository is [here](https://github.com/offlinesoftware/guimacrotester).
 
-## Commands
+## Running from code
 
-* [`zensical new`][new] - Create a new project
-* [`zensical serve`][serve] - Start local web server
-* [`zensical build`][build] - Build your site
-
-  [new]: https://zensical.org/docs/usage/new/
-  [serve]: https://zensical.org/docs/usage/preview/
-  [build]: https://zensical.org/docs/usage/build/
 
 ## Examples
 
