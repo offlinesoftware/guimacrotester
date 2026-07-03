@@ -36,6 +36,9 @@ class MainWindow(QMainWindow):
             "normal":       "GUI Macro Tester", 
             "recording":    "GUI Macro Tester    RECORDING"
         }
+
+        Paths.load_icons()
+
         self.setWindowTitle(self.titles["normal"])
         self.setFixedSize(1000, 700)
         self.setWindowIcon(QIcon(Paths.icon("tw.png")))
@@ -49,7 +52,7 @@ class MainWindow(QMainWindow):
         
         self.add_to_ms_button = QPushButton(" Add to macro-sequence")
         self.add_to_ms_button.clicked.connect(self.add_seq_to_ms)
-        self.add_to_ms_button.setIcon(QIcon(Paths.icon("arrow-270.png")))
+        self.add_to_ms_button.setIcon(Paths.get("down_triangle"))
         self.add_to_ms_button.setEnabled(False)
         
         centralVBox = QVBoxLayout(container)
@@ -80,7 +83,6 @@ class MainWindow(QMainWindow):
         else:
             self.setWindowTitle(self.titles["normal"])
 
-
     # Copy current sequence into the macro-sequence
     def add_seq_to_ms(self):
         sequence_name, ok = QInputDialog.getText(self, 'Enter sequence name', 'Name of new sequence:')
@@ -101,35 +103,35 @@ class MainWindow(QMainWindow):
         # > File menu        
         file_menu = menu.addMenu("&File")
 
-        # > > Open file
+        # > > Open sequence file
         self.open_file_action = self.menu_action(
             menu=file_menu,         text="Open sequence...", 
             slot=self.open_file,    tip="Load an input sequence from a TWS file",
-            enabled=True,           icon="disk--arrow.png"
+            enabled=True,           icon="open_seq"
         )
 
-        # > > Save macro-sequence
+        # > > Save sequence file
         self.save_file_action = self.menu_action(
             menu=file_menu,         text="Save sequence as...", 
             slot=self.save_file,    tip="Save current sequence to file",
-            enabled=False,          icon="disk--pencil.png"
+            enabled=False,          icon="save_seq"
         )
 
         # > > Macro-sequence bits
         file_menu.addSeparator()
 
         # > > Open macro-sequence
-        self.open_file_action = self.menu_action(
+        self.open_ms_action = self.menu_action(
             menu=file_menu,         text="Open macro-sequence...", 
             slot=self.open_macro,   tip="Load a macro-sequence from a TWM file",
-            enabled=True,           icon="cd--arrow.png"
+            enabled=True,           icon="open_mac"
         )
 
         # > > Save macro-sequence
         self.save_ms_action = self.menu_action(
             menu=file_menu,         text="Save macro-sequence as...", 
             slot=self.save_macro,   tip="Save current macro-sequence to file",
-            enabled=False,          icon="cd--pencil.png"
+            enabled=False,          icon="save_mac"
         )
 
         # > Help menu
@@ -139,13 +141,14 @@ class MainWindow(QMainWindow):
         self.about_action = self.menu_action(
             menu=help_menu,     text="About GUI Macro Tester", 
             slot=self.about,    tip="Find out more about GUI Macro Tester",
-            enabled=True,       icon="question.png"
+            enabled=True,       icon="question"
         )
 
 
     # Menu button action builder
     def menu_action(self, menu, text, slot, tip, enabled, icon=None):
-        ma = menu.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
+        # ma = menu.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
+        ma = menu.addAction(QIcon(Paths.get(icon)) if icon else QIcon(), text, slot)
         ma.setStatusTip(tip)
         ma.setEnabled(enabled)
         return ma
@@ -259,6 +262,8 @@ class MainWindow(QMainWindow):
     # Remove the currently selected row of the macro-sequence table
     def delete_ms_row(self):
         self.ms_table.removeRow(self.ms_table.currentRow())
+        if self.ms_table.rowCount() == 0:
+            self.set_ms_available(False)
     
 
     # Enable or disable GUI elements based on whether a sequence is available

@@ -3,7 +3,7 @@ GUI Macro Tester
 
 ## TODO: Feature freeze for V1.0
 - Write documentation
-- Create executable for Windows
+- ~~Create executable for Windows~~
 
 ## Backlog
 - ~~Allowing loading macro-sequence from file~~
@@ -26,5 +26,15 @@ GUI Macro Tester
   - ~~Allow changing order of events~~
   - ~~Requires playback from table, not just dict~~
 
+- MVC
+  - Base both tables on QAbstractTableModel / QTableView
+
 - Allow master offset of all co-ordinates
   - Either by clicked example or entering x/y value
+
+- Replace icons with standard Qt ones, eg:
+'''
+style = button.style() # Get the QStyle object from the widget.
+icon = style.standardIcon(style.SP_MessageBoxCritical)
+button.setIcon(icon)
+'''

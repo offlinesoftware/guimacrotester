@@ -1,18 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/arrow-090.png</file>
-        <file>icons/arrow-270.png</file>
-        <file>icons/arrow-transition-090.png</file>
-        <file>icons/arrow-transition-270.png</file>
-        <file>icons/cd--arrow.png</file>
-        <file>icons/cd--pencil.png</file>
-        <file>icons/control-record.png</file>
-        <file>icons/control.png</file>
-        <file>icons/disk--arrow.png</file>
-        <file>icons/disk--pencil.png</file>
-        <file>icons/new.png</file>
-        <file>icons/question.png</file>
-        <file>icons/table-delete-row.png</file>
         <file>icons/tw.png</file>
     </qresource>
 </RCC>

@@ -42,8 +42,11 @@ class InputController(QObject):
 
     # Capture mousewheel scroll events
     def on_scroll(self, x, y, dx, dy):
+        ''' Todo: make scrolling work
         m_scroll = {"type": "scroll", "x": x, "y": y, "dx": dx, "dy": dy}
         self.sequence.append(m_scroll)
+        '''        
+        pass
 
 
     # Press of keyboard buttons (not mouse clicks)

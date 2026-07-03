@@ -33,7 +33,7 @@ class Toolbar(QToolBar):
         self.record_sequence_action = self.create_action(
             text="Record sequence", slot=self.parent().record_sequence,
             enabled=True,           tip="Record a sequence of inputs",
-            icon="control-record.png"
+            icon="record"
         )
 
         # Reduce misclicks
@@ -43,7 +43,7 @@ class Toolbar(QToolBar):
         self.play_sequence_action = self.create_action(
             text="Play sequence",   slot=self.parent().play_sequence,
             enabled=False,          tip="Play back the recorded sequence of inputs",
-            icon="control.png"
+            icon="play"
         )
 
         # Separate play button from delay checkbox
@@ -94,21 +94,21 @@ class Toolbar(QToolBar):
         self.clear_table_action = self.create_action(
             text="Clear sequence",  slot=self.parent().clear_table,
             enabled=False,          tip="Clear the current sequence shown in the top table",
-            icon="new.png"
+            icon="clear"
         )
 
         # Sequence editor 'Move up' button
         self.move_up_action = self.create_action(
             text="Move up", slot=self.parent().sequence_table.move_up,
             enabled=False,  tip="Move one row of the input sequence table upwards",
-            icon="arrow-090.png"
+            icon="up_arrow"
         )
 
         # Move down button
         self.move_down_action = self.create_action(
             text="Move down",   slot=self.parent().sequence_table.move_down,
             enabled=False,      tip="Move one row of the input sequence table downwards",
-            icon="arrow-270.png"
+            icon="down_arrow"
         )
 
         # Spacing between top and bottom controls
@@ -119,22 +119,22 @@ class Toolbar(QToolBar):
         # Macro sequence 'Delete row' button
         self.delete_ms_row_action = self.create_action(
             text="Delete row",  slot=self.parent().delete_ms_row,
-            enabled=False,          tip="Delete the selected row of the macro-sequence row",
-            icon="table-delete-row.png"
+            enabled=False,      tip="Delete the selected row of the macro-sequence row",
+            icon="delete"
         )
 
         # Macro-sequence 'Move up' button
         self.ms_up_action = self.create_action(
             text = "Move up",   slot=self.parent().ms_table.move_up,
             enabled=False,      tip="Move one row of the macro-sequence table upwards",
-            icon="arrow-090.png"
+            icon="up_arrow"
         )
 
         # Macro-sequence Move Down button
         self.ms_down_action = self.create_action(
             text="Move down",   slot=self.parent().ms_table.move_down,
             enabled=False,      tip="Move one row of the macro-sequence table downwards",
-            icon="arrow-270.png"
+            icon="down_arrow"
         )
 
         self.add_spacer()
@@ -155,7 +155,7 @@ class Toolbar(QToolBar):
 
     # Button action builder
     def create_action(self, text, slot, enabled, tip, icon=None):
-        act = self.addAction(QIcon(Paths.icon(icon)) if icon else QIcon(), text, slot)
+        act = self.addAction(QIcon(Paths.get(icon)) if icon else QIcon(), text, slot)
         act.setStatusTip(tip)
         act.setEnabled(enabled)
         return act

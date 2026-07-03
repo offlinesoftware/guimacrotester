@@ -1,6 +1,6 @@
 from paths import Paths
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QIcon
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QLabel, QVBoxLayout
 
 class AboutDialog(QDialog):
@@ -8,6 +8,7 @@ class AboutDialog(QDialog):
     # Constructor
     def __init__(self):
         super().__init__()
+        self.setWindowIcon(QIcon(Paths.get("question")))
 
         QBtn = QDialogButtonBox.StandardButton.Ok  # No cancel
         self.buttonBox = QDialogButtonBox(QBtn)
@@ -18,18 +19,19 @@ class AboutDialog(QDialog):
 
         layout = QVBoxLayout()
 
-        title = QLabel("GUI Macro Tester")
+        title = QLabel("GUI Macro Tester V1.1.0")
         font = title.font()
         font.setPointSize(20)
         title.setFont(font)
 
         layout.addWidget(title)
+        layout.addWidget(QLabel("github.com/offlinesoftware"))
 
         logo = QLabel()
         logo.setPixmap(QPixmap(Paths.icon("tw.png")))
         layout.addWidget(logo)
 
-        layout.addWidget(QLabel("github.com/offlinesoftware"))
+        layout.addWidget(QLabel("Released under Apache 2.0 license"))
         layout.addWidget(QLabel("Copyright 2026 Thomas Walker"))
 
         for i in range(0, layout.count()):
