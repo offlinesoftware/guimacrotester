@@ -10,7 +10,7 @@ The software is released under the Apache License 2.0, which in short means that
 
 # Getting started
 ## Windows executable
-Version 1.0.0 is availble [here](https://github.com/offlinesoftware/guimacrotester).
+Version 1.1.0 is available [here](https://github.com/offlinesoftware/guimacrotester/releases).
 
 ## Running from code
 !!! warning
@@ -32,3 +32,7 @@ pip install pyside6 pynput
 ``` bash hl_lines="1" title="3. Run from the project root"
 python src/main.py
 ```
+<figure markdown="span">
+  ![Image title](images/gmt.jpg){ width="800" }
+  <figcaption>GUI Macro Tester</figcaption>
+</figure>
