@@ -8,6 +8,28 @@
 
 [project]
 
+nav = [
+  { "Introduction" = "index.md" },
+  { "Recording a sequence" = "recording.md" },
+  { "Building a macro-sequence" = "build_macro.md" }
+]
+
+# [project]
+# nav = [
+#   { "Home" = "index.md" },
+#   { "User Guide" = [
+#       "guide/installation.md",
+#       "guide/configuration.md",
+#       "guide/troubleshooting.md"
+#     ]
+#   },
+#   { "API" = [
+#       "api/overview.md",
+#       "api/classes.md"
+#     ]
+#   }
+# ]
+
 # The site_name is shown in the page header and the browser window title
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_name
