@@ -1,5 +1,5 @@
 ---
-icon: lucide/dot
+icon: lucide/package-open
 ---
 
 # Introduction

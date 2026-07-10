@@ -1,9 +1,8 @@
 # guimacrotester
 GUI Macro Tester
 
-## TODO: Feature freeze for V1.0
-- Write documentation
-- ~~Create executable for Windows~~
+## Documentation
+- In progress
 
 ## Backlog
 - ~~Allowing loading macro-sequence from file~~
@@ -19,6 +18,7 @@ GUI Macro Tester
 - Programatic features
   - Allow for-loops with incrementing values
   - Allow running of macro with custom string for eg. program name
+  - Allow pause for user to do something - 'Press any key to continue'
 
 - Allow editing of macros via sequence table
   - Enable or disable cells as editable appropriately
@@ -31,10 +31,3 @@ GUI Macro Tester
 
 - Allow master offset of all co-ordinates
   - Either by clicked example or entering x/y value
-
-- Replace icons with standard Qt ones, eg:
-'''
-style = button.style() # Get the QStyle object from the widget.
-icon = style.standardIcon(style.SP_MessageBoxCritical)
-button.setIcon(icon)
-'''
