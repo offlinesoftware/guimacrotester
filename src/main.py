@@ -143,6 +143,14 @@ class MainWindow(QMainWindow):
             slot=self.about,    tip="Find out more about GUI Macro Tester",
             enabled=True,       icon="question"
         )
+        
+        if Paths.debug:
+            # > > Debug
+            self.debug_action = self.menu_action(
+                menu=help_menu,     text="Debug", 
+                slot=self.debug,    tip="Take this out!",
+                enabled=True,       icon="question"
+            )
 
 
     # Menu button action builder
@@ -158,6 +166,8 @@ class MainWindow(QMainWindow):
         dlg = AboutDialog()
         dlg.exec()
     
+    def debug(self):
+        print(len(self.input_controller.sequence))
 
     # Load sequence file from disk
     def open_file(self):
@@ -316,6 +326,8 @@ class MainWindow(QMainWindow):
 
     # Capture keyboard and mouse inputs and save to sequence table
     def record_sequence(self):
+        if Paths.debug:
+            print("ENTERED RECORD SEQUENCE")
         if self.top_toolbar.record_sequence_action.text().endswith('*'):
             if not self.okay_to_clear_sequence():
                 return

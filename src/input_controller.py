@@ -121,8 +121,11 @@ class InputController(QObject):
         if Paths.debug:
             print('Return position is {0}'.format(return_position))
             print("use_delay:", use_delay)
-        for inpt in self.sequence:
-
+        
+        # Iterate in slightly awkward manner to sidestep repetition bug on Linux
+        len_seq = len(self.sequence)
+        for i in range(len_seq):
+            inpt = self.sequence[i]
             if use_delay:
                 time.sleep(delay_value / 1000)
             match inpt["type"]:
