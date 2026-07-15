@@ -10,7 +10,7 @@
 
 nav = [
   { "Introduction" = "index.md" },
-  { "Recording a sequence" = "recording.md" },
+  { "Recording a and playing sequence" = "recording.md" },
   { "Building a macro-sequence" = "build_macro.md" }
 ]
 

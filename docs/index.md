@@ -32,6 +32,6 @@ python src/main.py
 ### Main window
 GUI Macro Tester should appear as shown below.
 <figure markdown="span">
-  ![Image title](images/main_window.png){ width="800"; style="border:1px solid #000000"}
-  <figcaption>GUI Macro Tester running on Linux</figcaption>
+  ![Image title](images/main_window.jpg)
+  <figcaption>GUI Macro Tester main window</figcaption>
 </figure>
