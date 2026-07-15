@@ -22,8 +22,8 @@ class Paths:
             "save_mac":         style.standardIcon(QStyle.StandardPixmap.SP_DriveFDIcon),
             "record":           style.standardIcon(QStyle.StandardPixmap.SP_DialogNoButton),
             "play":             style.standardIcon(QStyle.StandardPixmap.SP_MediaPlay),
-            "clear":            style.standardIcon(QStyle.StandardPixmap.SP_DialogResetButton),
-            "delete":           style.standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton),
+            "delete":            style.standardIcon(QStyle.StandardPixmap.SP_DialogResetButton),
+            "clear":           style.standardIcon(QStyle.StandardPixmap.SP_DialogDiscardButton),
             "question":         style.standardIcon(QStyle.StandardPixmap.SP_MessageBoxQuestion)
         }
         
